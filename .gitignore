@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# data 
+CNRPark-Patches-150x150*
+CNR-EXT-Patches-150x150*
+CNR-EXT_FULL_IMAGE_1000x750*
 # Distribution / packaging
 .Python
 build/
@@ -150,3 +154,5 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+.DS_Store
+lab5_2022.pdf
