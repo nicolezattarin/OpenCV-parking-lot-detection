@@ -18,6 +18,13 @@ camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image, cv::Ma
     m_image_parking_lots = image_parking_lots;
 }
 
+camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image, cv::Mat image_parking_lots, string path){
+    m_parkings = parkings;
+    m_image = image;
+    m_image_parking_lots = image_parking_lots;
+    m_path = path;
+}
+
 void camera_picture :: setParking(vector<Parking> parkings){
     m_parkings = parkings;
 }

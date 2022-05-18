@@ -19,6 +19,7 @@ class camera_picture
         camera_picture();
         camera_picture(vector<Parking>, cv::Mat);
         camera_picture(vector<Parking>, cv::Mat, cv::Mat);
+        camera_picture(vector<Parking>, cv::Mat, cv::Mat, string);
         ~camera_picture(){};
 
         // setters/getters
@@ -33,5 +34,6 @@ class camera_picture
         vector<Parking> m_parkings; //all the parkings in the image
         cv::Mat m_image; //image of the specific camera
         cv::Mat m_image_parking_lots; //image with rectangles around the parking lots
+        string m_path; //path to the image
 };
 #endif

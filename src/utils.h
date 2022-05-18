@@ -11,9 +11,10 @@
 #include "parking.h"
 #include <glob.h>
 #include <sstream>
+#include "camera_picture.h"
 
 vector<Parking> ReadCameraCSV(string filename);
-vector<cv::Mat> ReadImages(int camera_number, string weather);
+vector<camera_picture> ReadImages(int camera_number, string weather);
 char to_upper_char (char c);
 string to_upper (string s);
 void test(string path);

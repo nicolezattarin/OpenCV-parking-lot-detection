@@ -1,5 +1,10 @@
 #include "utils.h"
 
+int ORIGINAL_WIDTH = 2592;
+int ORIGINAL_HEIGHT = 1944;
+int FINAL_WIDTH = 1000;
+int FINAL_HEIGHT = 750;
+
 /**
  * @brief return a vector of parking lots from a csv file, assigns id, x, y, width, height,
  *  while image and isEmpty are initialized as default in parking.h
@@ -9,6 +14,10 @@
  */
 
 vector<Parking> ReadCameraCSV(string filename){
+
+    // Pixel coordinates of the bouding boxes refer to the 2592x1944 version of 
+    // the image and need to be rescaled to match the 1000x750 version.
+
     cout << "reading file " << filename << endl;
     ifstream file (filename);
     vector<Parking> parkings;
@@ -30,11 +39,48 @@ vector<Parking> ReadCameraCSV(string filename){
         getline(ss, y, ',');
         getline(ss, width, ',');
         getline(ss, height);
-
-        Parking p(stoi(id), stoi(x), stoi(y), stoi(width), stoi(height));
+        //rescaling
+        int xx = stof(x)/ORIGINAL_WIDTH * FINAL_WIDTH;
+        int yy = stof(y)/ORIGINAL_HEIGHT * FINAL_HEIGHT;
+        int wwidth = stof(width)/ORIGINAL_WIDTH * FINAL_WIDTH;
+        int hheight = stof(height)/ORIGINAL_HEIGHT * FINAL_HEIGHT;
+        Parking p(stoi(id), xx, yy, wwidth, hheight);
         parkings.push_back(p);
     }
     return parkings;
+}
+
+/**
+ * @brief Get the Camera Pictures object
+ * 
+ * @param filenames 
+ * @param parkings_coordinates 
+ * @return vector<camera_picture> 
+ */
+
+vector<camera_picture> GetCameraPictures(vector<string> filenames, vector<Parking> parkings_coordinates){
+    vector<camera_picture> camera_images;
+    //iterate over the images (pov of a camera)
+    for (int i = 0; i < filenames.size(); i++){
+        cv::Mat image = cv::imread(filenames[i]);
+        cv::Mat image_parking_lots = image.clone();//original image with squares in correspondence of parking lots
+        vector<Parking> parkings;
+        for (int j = 0; j < parkings_coordinates.size(); j++){
+            Parking p = parkings_coordinates[j];
+            // set image of the parking slot in parking, i.e. fine the 
+            // subimage corresponding to the parking slot in the image
+            cv::Range rows(p.getY(), p.getY() + p.getHeight());
+            cv::Range cols(p.getX(), p.getX() + p.getWidth());
+            cv::Mat slot_image = image.clone();
+            slot_image = slot_image(rows, cols);
+            cv::rectangle(image_parking_lots, cv::Point(p.getX(), p.getY()), 
+                        cv::Point(p.getX() + p.getWidth(), p.getY() + p.getHeight()), 
+                        cv::Scalar(0, 255, 0), 2);
+            parkings.push_back(Parking(p.getId(), p.getX(), p.getY(), p.getWidth(), p.getHeight(), slot_image));
+        }
+        camera_images.push_back(camera_picture(parkings, image, image_parking_lots, filenames[i]));
+    }
+    return camera_images;
 }
 
 /**
@@ -45,12 +91,23 @@ vector<Parking> ReadCameraCSV(string filename){
  * @return vector<Mat> 
  */
 
-vector<cv::Mat> ReadImages(int camera_number, string weather){
+vector<camera_picture> ReadImages(int camera_number, string weather){
     if (camera_number < 1 || camera_number > 9){
         cerr << "camera number should be from 1 to 9" << endl;}
     if (weather != "rainy" && weather != "sunny" && weather != "overcast" && weather != "all"){
         cerr << "weather should be 'rainy', 'sunny', 'overcast' or 'all'" << endl;}
 
+    /* READ PARKING LOTS INFORMATIONS */
+
+    // read camera csv with position of parking lots: this is generic,once we choose the camera it hold in eahc condition 
+    cout << "\nreading camera csv..." << endl;
+    string parking_lots = "../CNR-EXT_FULL_IMAGE_1000x750/camera" + to_string(camera_number) + ".csv";
+    vector<Parking> parkings_coordinates = ReadCameraCSV(parking_lots);
+
+    if (parkings_coordinates.size() == 0){
+        cerr << "can't read parking lots from " << parking_lots << endl;}
+
+    /* READ IMAGES */
     // read camera csv with position of parking lots for a specific weather
     if (weather != "all"){
         const string base_dir = "/Users/nicolez/Documents/GitHub/OpenCV-parking-lot-detection/CNR-EXT_FULL_IMAGE_1000x750/FULL_IMAGE_1000x750/" + to_upper(weather);
@@ -58,34 +115,20 @@ vector<cv::Mat> ReadImages(int camera_number, string weather){
         string path = base_dir + pattern;
         vector<string> filenames = glob_path(base_dir + pattern);
 
-        // DEBUG: 
-        // cout << "filenames: " << filenames.size() << endl;
-
-        vector<cv::Mat> images;
-        for (int i = 0; i < filenames.size(); i++){
-            cv::Mat image = cv::imread(filenames[i]);
-            images.push_back(image);
-        }
-        return images;
+        //define a vector of camera pictures:
+        vector<camera_picture> camera_images = GetCameraPictures(filenames, parkings_coordinates);
+        return camera_images;
     }
     else {
         const string base_dir = "/Users/nicolez/Documents/GitHub/OpenCV-parking-lot-detection/CNR-EXT_FULL_IMAGE_1000x750/FULL_IMAGE_1000x750/*";
         const string pattern = "/*/camera" + to_string(camera_number)+ "/*.jpg";
         string path = base_dir + pattern;
         vector<string> filenames = glob_path(base_dir + pattern);
-
-        // DEBUG: 
-        cout << "filenames: " << filenames.size() << endl;
-
-        vector<cv::Mat> images;
-        for (int i = 0; i < filenames.size(); i++){
-            cv::Mat image = cv::imread(filenames[i]);
-            images.push_back(image);
-        }
-        return images;
+        //define a vector of camera pictures:
+        vector<camera_picture> camera_images = GetCameraPictures(filenames, parkings_coordinates);
+        return camera_images;
     }
   }
-
 
 /**
  * @brief returns a char converted to upper case
@@ -108,7 +151,8 @@ string to_upper (string s){
 }
 
 /**
- * @brief Glob management to find matching paths, taken from https://stackoverflow.com/questions/8401777/simple-glob-in-c-on-unix-system
+ * @brief Glob management to find matching paths, taken from
+ *  https://stackoverflow.com/questions/8401777/simple-glob-in-c-on-unix-system
  * 
  * @param pattern 
  * @return std::vector<std::string> 
@@ -133,10 +177,6 @@ vector<string> glob_path(const string& pattern) {
     for(size_t i = 0; i < glob_result.gl_pathc; ++i) {
         filenames.push_back(string(glob_result.gl_pathv[i]));
     }
-
-    // cleanup
     globfree(&glob_result);
-
-    // done
     return filenames;
 }

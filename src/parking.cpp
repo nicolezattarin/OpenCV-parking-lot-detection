@@ -2,15 +2,27 @@
 
 Parking :: Parking(){
     m_isEmpty = true;
-    int m_id = -1;
-    float m_x = -1;
-    float m_y = -1;
-    float m_width = -1;
-    float m_height = -1; 
+    m_id = -1;
+    m_x = -1;
+    m_y = -1;
+    m_width = -1;
+    m_height = -1; 
+    m_image = cv::Mat();
 }
 
 Parking :: Parking(int id, int x, int y, int width, int height){
     m_isEmpty = true;
+    m_image = cv::Mat();
+    m_id = id;
+    m_x = x;
+    m_y = y;
+    m_width = width;
+    m_height = height;
+}
+
+Parking :: Parking(int id, int x, int y, int width, int height, cv::Mat image){
+    m_isEmpty = true;
+    m_image = image;
     m_id = id;
     m_x = x;
     m_y = y;
@@ -65,4 +77,12 @@ void Parking :: setHeight(int height){
 
 int Parking :: getHeight(){
     return m_height;
+}
+
+void Parking :: setImg(cv::Mat img){
+    m_image = img;
+}
+
+cv::Mat Parking :: getImg(){
+    return m_image;
 }

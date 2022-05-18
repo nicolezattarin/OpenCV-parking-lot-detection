@@ -37,33 +37,20 @@ int main(int argc, char** argv){
         cout << "weather should be 'rainy', 'sunny', 'overcast' or 'all'" << endl;
         return -1;}
     
-    // read camera csv with position of parking lots
-    cout << "\nreading camera csv..." << endl;
-    string parking_lots = "../CNR-EXT_FULL_IMAGE_1000x750/camera" + to_string(camera_number) + ".csv";
-    vector<Parking> parkings = ReadCameraCSV(parking_lots);
-
-    if (parkings.size() == 0){
-        cout << "can't read parking lots from " << parking_lots << endl;
-        return -1;}
-
-    // DEBUG: print all parking lots
-    // for (int i = 0; i < parkings.size(); i++){
-    //     cout << "id: " << parkings[i].getId() 
-    //         << ", x: " << parkings[i].getX() << ", y: " << parkings[i].getY() 
-    //         << ", width: " << parkings[i].getWidth() << ", height: " << parkings[i].getHeight() 
-    //         << endl;}
-    
     // read images
     cout << "\nreading images..." << endl;
-    vector<cv::Mat> images = ReadImages(camera_number, weather);
-    if (images.size() == 0){
-        cout << "can't read images from CNR-EXT_FULL_IMAGE_1000x750/" << weather << "/*/camera" << camera_number << "/*.jpg" << endl;
-        return -1;}
+    vector<camera_picture> images = ReadImages(camera_number, weather);
     
-    // DEBUG: print some images
-    imshow("image", images[0]);
-    waitKey(0);
+    // DEBUG: print and save first image information
+    camera_picture first_image = images[0];
+    imwrite("test_img/first_image.jpg", first_image.getImg());
+    imwrite("test_img/first_image_lots.jpg", first_image.getImgParkingLots());
+    vector<Parking> parkings = first_image.getParking();
+    for (int i=0; i<parkings.size(); i++){
+        imwrite("test_img/first_image_p"+to_string(parkings[i].getId())+".jpg", parkings[i].getImg());
+    }
 
+    //TO DO: LINE DETECTION->GET ANGLE OF MAIN ->ROTATE IMG
 
     return 0;
     }
