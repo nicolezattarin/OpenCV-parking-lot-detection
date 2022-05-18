@@ -13,6 +13,7 @@ __pycache__/
 CNRPark-Patches-150x150*
 CNR-EXT-Patches-150x150*
 CNR-EXT_FULL_IMAGE_1000x750*
+classifier_data*
 # Distribution / packaging
 .Python
 build/
