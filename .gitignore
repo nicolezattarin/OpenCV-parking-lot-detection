@@ -7,7 +7,6 @@ __pycache__/
 *.so
 *.o
 *.exe
-/src/*.o
 
 # data 
 CNRPark-Patches-150x150*
@@ -161,3 +160,4 @@ cython_debug/
 #.idea/
 .DS_Store
 lab5_2022.pdf
+*.o
