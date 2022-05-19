@@ -6,7 +6,7 @@ import seaborn as sns
 
 # tensorflow
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.layers import Conv2D, Flatten, Dense, MaxPooling2D, RandomFlip, RandomRotation, RandomZoom, Dropout, Rescaling
+from tensorflow.keras.layers import Conv2D, Flatten, Dense, MaxPooling2D, Dropout
 from tensorflow.keras.models import Sequential
 
 class CNNClassifier():
@@ -40,6 +40,9 @@ class CNNClassifier():
         return train_generator, validation_generator
 
     def _create_model(self, img_height, img_width, dropout=0.5):
+        # shape note: if you have 30 images of 50x50 pixels in RGB (3 channels), 
+        # the shape of your input data is (30,50,50,3).
+
         input_shape = (img_height, img_width, 3)
         model = Sequential([ 
                             Conv2D(16, (3,3), activation='relu', input_shape=input_shape),
@@ -58,7 +61,6 @@ class CNNClassifier():
         print("Model created \nSUMMARY:")
         print(model.summary())
         return model
-    
 
     def train(self, train_dir="../classifier_data/train" , val_dir="../classifier_data/val",
                      dropout=0.5, batch_size=32, epochs=15):
@@ -74,7 +76,9 @@ class CNNClassifier():
         self.trained = True
         import os
         if not os.path.isdir("CNN_model"): os.mkdir("CNN_model")
-        self._save_model(model_name="CNN_model/{}_epochs_{}_batch_classifier".format(epochs, batch_size))
+        model_dir = "CNN_model/{}_epochs_{}_batch_classifier".format(epochs, batch_size)
+        self._save_model(model_name=model_dir)
+        self._write_graph_to_pb(model_dir=model_dir)
         self._save_history(history_name="CNN_model/{}_epochs_{}_batch_history.npy".format(epochs, batch_size))
         return self.history
 
@@ -95,3 +99,20 @@ class CNNClassifier():
             self.model = tf.keras.models.load_model(model_name)
         else:
             print("Model has not been trained yet.")
+
+    def _write_graph_to_pb(self, model_dir="CNN_model"):
+        """
+        convert saved_model.pb to frozen graph taken from https://www.ai2news.com/blog/54180/ (in chinese?)
+        we need to save a frozen graph to upload the model in opencv c++, otherwise the error
+        "'opencv_tensorflow.FunctionDef.Node.ret' contains invalid UTF-8 data when parsing a protocol buffer." occurs
+        """
+        m = tf.saved_model.load(model_dir)
+
+        from tensorflow.python.framework.convert_to_constants import convert_variables_to_constants_v2
+
+        tfm = tf.function(lambda x: m(x))  # full model
+        tfm = tfm.get_concrete_function(tf.TensorSpec(m.signatures['serving_default'].inputs[0].shape.as_list(),
+                                                    m.signatures['serving_default'].inputs[0].dtype.name))
+        frozen_func = convert_variables_to_constants_v2(tfm)
+        frozen_func.graph.as_graph_def()
+        tf.io.write_graph(graph_or_graph_def=frozen_func.graph, logdir=model_dir, name="saved_model_graph.pb", as_text=False)
