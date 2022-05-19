@@ -13,6 +13,8 @@ __pycache__/
 *.dvi
 *out
 *.gz
+#CNN_model
+*/CNN_model/*
 
 # data 
 CNRPark-Patches-150x150*
@@ -169,3 +171,4 @@ lab5_2022.pdf
 *.o
 *.o
 src/camera_picture.o
+*.o
