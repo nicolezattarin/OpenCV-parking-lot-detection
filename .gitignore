@@ -172,3 +172,4 @@ lab5_2022.pdf
 *.o
 src/camera_picture.o
 *.o
+*.index
