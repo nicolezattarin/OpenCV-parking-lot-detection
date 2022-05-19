@@ -1,7 +1,7 @@
 #include "parking.h"
 
 Parking :: Parking(){
-    m_isEmpty = true;
+    m_isFree = true;
     m_id = -1;
     m_x = -1;
     m_y = -1;
@@ -11,7 +11,7 @@ Parking :: Parking(){
 }
 
 Parking :: Parking(int id, int x, int y, int width, int height){
-    m_isEmpty = true;
+    m_isFree = true;
     m_image = cv::Mat();
     m_id = id;
     m_x = x;
@@ -21,7 +21,7 @@ Parking :: Parking(int id, int x, int y, int width, int height){
 }
 
 Parking :: Parking(int id, int x, int y, int width, int height, cv::Mat image){
-    m_isEmpty = true;
+    m_isFree = true;
     m_image = image;
     m_id = id;
     m_x = x;
@@ -32,11 +32,11 @@ Parking :: Parking(int id, int x, int y, int width, int height, cv::Mat image){
 
 // setters/getters
 void Parking :: setEmpty(bool isEmpty){
-    m_isEmpty = isEmpty;
+    m_isFree = isEmpty;
 }
 
 bool Parking :: isEmpty(){
-    return m_isEmpty;
+    return m_isFree;
 }
 
 void Parking :: setId(int id){

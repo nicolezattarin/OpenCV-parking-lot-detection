@@ -73,12 +73,17 @@ vector<camera_picture> GetCameraPictures(vector<string> filenames, vector<Parkin
             cv::Range cols(p.getX(), p.getX() + p.getWidth());
             cv::Mat slot_image = image.clone();
             slot_image = slot_image(rows, cols);
+
             cv::rectangle(image_parking_lots, cv::Point(p.getX(), p.getY()), 
                         cv::Point(p.getX() + p.getWidth(), p.getY() + p.getHeight()), 
                         cv::Scalar(0, 255, 0), 2);
+            // create object parking and push
             parkings.push_back(Parking(p.getId(), p.getX(), p.getY(), p.getWidth(), p.getHeight(), slot_image));
         }
-        camera_images.push_back(camera_picture(parkings, image, image_parking_lots, filenames[i]));
+        // create object camera_images and push
+        string date = filenames[i].substr(filenames[i].find_last_of("/")+1, 10);
+        string time = filenames[i].substr(filenames[i].find_last_of("_")+1, 4);
+        camera_images.push_back(camera_picture(parkings, image, image_parking_lots, filenames[i], date, time));
     }
     return camera_images;
 }
@@ -179,4 +184,54 @@ vector<string> glob_path(const string& pattern) {
     }
     globfree(&glob_result);
     return filenames;
+}
+
+/**
+ * @brief assign the status to each parking in all the camera pictures provided, recall that each 
+ * parking has a member bool m_isFree initialized to false
+ * 
+ * @param model_dir: path to the tensorflow trained model (frozen graph!)
+ * @param images:images, vector of all the camera pictures with the respective vectors of parking
+ */
+
+void ClassifyParkings(string model_dir, vector<camera_picture>& images){
+    vector<string> class_names = {"busy", "free"};
+    cout << "\nloading model..." << endl;
+    cv::dnn::Net model = cv::dnn::readNetFromTensorflow(model_dir);
+
+    if (model.empty()){
+        cerr << "can't load model from " << model_dir << ", no layers in the NN" << endl;
+        }
+
+    // run over all images
+    for (int i=0; i<images.size(); i++){
+        vector<Parking> parkings = images[i].getParking();
+        //run over all parkings of an image
+        for (int k=0; k<parkings.size(); k++){
+            cv::Mat slot_img = parkings[k].getImg();
+            cv::Mat slot_img_resized;
+
+            //DEBUG
+            if (i==0 && k==0){
+                cv::namedWindow("test");
+                cv::imshow("test", slot_img);
+                cv::waitKey(0);
+
+            }
+            resize(slot_img, slot_img_resized, cv::Size(150,150));
+    
+            cv::Mat blob_slot_img;
+            cv::dnn::blobFromImage(slot_img_resized, blob_slot_img, 1, cv::Size(150, 150)); //note for fine tuning, yu could add other params here
+            cout << blob_slot_img.size() << "   " << slot_img_resized.size << endl;
+
+            model.setInput(blob_slot_img);
+            cv::Mat out = model.forward();
+            cv::Point classIdPoint;
+            double final_prob;
+            minMaxLoc(out.reshape(1, 1), 0, &final_prob, 0, &classIdPoint);
+            int label_index = classIdPoint.x;
+            cout << "label index " << label_index << " label name " << class_names[label_index] << endl;
+        }
+    }
+
 }

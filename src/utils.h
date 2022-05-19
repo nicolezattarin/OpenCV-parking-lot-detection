@@ -13,11 +13,12 @@
 #include <sstream>
 #include "camera_picture.h"
 
-vector<Parking> ReadCameraCSV(string filename);
-vector<camera_picture> ReadImages(int camera_number, string weather);
-char to_upper_char (char c);
-string to_upper (string s);
-void test(string path);
-vector<string> glob_path(const string& pattern);
+vector<Parking> ReadCameraCSV(string);
+vector<camera_picture> ReadImages(int, string);
+char to_upper_char (char);
+string to_upper (string);
+void test(string);
+vector<string> glob_path(const string& );
+void ClassifyParkings(string, vector<camera_picture>& );
 
 #endif // UTILS_H

@@ -37,7 +37,7 @@ class Parking
         cv::Mat getImg();
 
     private:
-        bool m_isEmpty;
+        bool m_isFree;
         int m_id;
         int m_x;
         int m_y;
