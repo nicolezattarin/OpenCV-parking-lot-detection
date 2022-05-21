@@ -14,7 +14,7 @@ using namespace cv;
  * @brief 
  * 
  * @param argc
- * @param argv camera number, from 1 to 9, and weater, weather can be 'rainy', 'sunny', 'overcast' or 'all'
+ * @param argv camera number, from 1 to 9, and weater, weather can be 'rainy', 'sunny', 'overcast' or 'all' and flags to discriminate which steps of preprocessing to perform
  * @return int 
  **/
 
@@ -58,6 +58,11 @@ int main(int argc, char** argv){
         return -1;}
     bool blur_flag =  stoi(blur);
 
+    cout << "camera number: " << camera_number << endl;
+    cout << "weather: " << weather << endl;
+    cout << "rotation: " << rotation_flag << endl;
+    cout << "equalization: " << equalization_flag << endl;
+    cout << "blur: " << blur_flag << endl;
     
     // read images: each image is an object camera_picture, 
     // with all the informations regarding each parking lot (vector of parking), the global camera image,
@@ -79,7 +84,7 @@ int main(int argc, char** argv){
     /************************************************************************/
 
     cout << "\nsaving images..." << endl;
-    save_patches(images, weather, camera_number);
+    save_patches(images, weather, camera_number, rotation_flag, equalization_flag, blur_flag);
 
     // DEBUG: print and save first image information
     // camera_picture first_image = images[0];

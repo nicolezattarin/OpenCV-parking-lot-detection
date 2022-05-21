@@ -12,6 +12,8 @@
 #include "../data_structures/parking.h"
 #include <glob.h>
 #include <sstream>
+#include <cmath>
+
 #include "../data_structures/camera_picture.h"
 
 
@@ -22,5 +24,5 @@ void preprocess(cv::Mat& src, cv::Mat& dst, bool, bool);
 void preprocess_patches (vector<camera_picture> , bool);
 cv::Mat preprocess_patch(cv::Mat, float, bool);
 void equalize(cv::Mat&, cv::Mat&, std::vector<cv::Mat>&, std::vector<cv::Mat>& , string );
-
+void largest_rectangle(float&,float&,float);
 #endif // PREPROCESSING_H

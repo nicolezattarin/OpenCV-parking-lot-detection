@@ -55,7 +55,7 @@ def load_model(batch_size, epochs):
     model = tf.keras.models.load_model(model_dir)
     return model
 
-def classify_data (camera_number, weather, batch_size, epochs, n_imgs=None):
+def classify_data (camera_number, weather, dir_index, batch_size=32, epochs=10, n_imgs=None):
     """
     classify all images in the given camera and weather
     params:
@@ -67,8 +67,7 @@ def classify_data (camera_number, weather, batch_size, epochs, n_imgs=None):
     # example of path
     # PATCHES_PROCESSED/SUNNY/camera1/S_2015-11-12_07.09_C01_184.jpg
 
-    # dir = "../../PATCHES_PROCESSED/"+weather.upper()+"/camera"+str(camera_number)
-    dir ='../../CNR-EXT-Patches-150x150/PATCHES/SUNNY/2015-11-12/camera1'
+    dir = "../../PATCHES_PROCESSED/"+weather.upper()+"/camera"+str(camera_number)+"_"+dir_index
     import os
     if not os.path.exists(dir): raise Exception("path does not exist")
         
@@ -107,13 +106,16 @@ def get_accuracy(data, labels):
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("camera_number", type=int)
-parser.add_argument("weather", type=str)
-parser.add_argument("--nimgs", type=int, default=200)
+parser.add_argument("--camera_number", type=int, default=1)
+parser.add_argument("--weather", type=str, default='sunny')
+parser.add_argument("--nimgs", type=int, default=500)
 parser.add_argument("--preprocessing", type=str, default="none")
+parser.add_argument("--dir_index", type=str, default="000") # eg camera_000, camera_001 according to the kind of preprocess, 
+                                                            # should be made automatic in a second version of the code
 
-def main (camera_number, weather, nimgs, preprocessing):
-    classified_sample = classify_data (1, 'sunny', batch_size=32, epochs=10, n_imgs=nimgs)
+def main (camera_number, weather, nimgs, preprocessing, dir_index):
+
+    classified_sample = classify_data (1, 'sunny', dir_index, batch_size=32, epochs=10, n_imgs=nimgs)
     labels = get_labels(1, 'sunny')
     accuracy = get_accuracy(classified_sample, labels)
     

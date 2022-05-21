@@ -22,6 +22,6 @@ char to_upper_char (char);
 string to_upper (string);
 void test(string);
 vector<string> glob_path(const string&);
-void save_patches(vector<camera_picture>, string, int);
+void save_patches(vector<camera_picture>, string, int, bool, bool, bool);
 
 #endif // UTILS_H

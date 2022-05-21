@@ -210,3 +210,59 @@ void equalize(cv::Mat& img, cv::Mat& equalized_img,
         for (int i = 0; i < 3; i++) cv::calcHist(&channels[i], nimages, nchannels, cv::Mat(), hists[i], 
                     dims, histSize, ranges, true, false);
         }
+
+
+/**
+* @brief computes the width and height of the largest possible
+* axis-aligned rectangle (maximal area) within the rotated rectangle.
+* (see formula from https://qa.ostack.cn/qa/?qa=501959/)
+* @param width of the original image
+* @param heigh of the original image
+* @param rad_angle angle of rotation (in radians)
+*/
+
+void largest_rectangle(float& width,float& heigh,float rad_angle){
+
+    if (width<= 0 || heigh <=0){cerr << "There is no image, image has size 0x0" << endl;}
+
+    // find larger dimension
+    bool width_larger = 0;
+    float long_dim = 0;
+    float short_dim = 0;
+    if (width>heigh) {
+        width_larger = 1;
+        long_dim = width;
+        short_dim = heigh;
+    }
+    else{
+        long_dim = heigh;
+        short_dim = width;   
+    }
+
+    //  since the solutions for angle, -angle and 180-angle are all the same,
+    //  it is sufficient to look at the first quadrant and the absolute values of sin,cos:
+    float sin_a = abs(sin(rad_angle));
+    float cos_a = abs(cos(rad_angle));
+    float x = 0;
+    float hmax = 0;
+    float wmax = 0;
+    float cos_2a = 0;
+    if (short_dim <= 2.*sin_a*cos_a*long_dim || abs(sin_a-cos_a) < 1e-10){
+        x = 0.5*short_dim;
+        if (width_larger){
+            wmax = x/sin_a; 
+            hmax = x/cos_a;
+        }
+        else{
+            wmax = x/cos_a; 
+            hmax = x/sin_a;
+        }
+    }
+    else{
+        cos_2a = cos_a*cos_a - sin_a*sin_a;
+        wmax = (width*cos_a - heigh*sin_a)/cos_2a;
+        hmax = (heigh*cos_a - width*sin_a)/cos_2a;
+    }
+    heigh = hmax;
+    width = wmax;
+}

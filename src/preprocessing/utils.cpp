@@ -214,7 +214,8 @@ vector<string> glob_path(const string& pattern) {
     return filenames;
 }
 
-void save_patches(vector<camera_picture> camera_images, string weather, int camera_number){
+void save_patches(vector<camera_picture> camera_images, string weather, int camera_number,
+                bool rotation, bool equalization, bool blur){
     // run over all the images of the camera, considering thatpatches from the datsset are loaded as:
 
     // CNR-EXT-Patches-150x150/PATCHES/<WEATHER>/<CAPTURE_DATE>/camera<CAM_ID>/<W_ID>_<CAPTURE_DATE>_<CAPTURE_TIME>_C0<CAM_ID>_<SLOT_ID>.jpg
@@ -234,7 +235,7 @@ void save_patches(vector<camera_picture> camera_images, string weather, int came
             int parking_id = p.getId();
 
             cv::resize(patch, patch, cv::Size(150, 150)); //the CNN requires patches of 150x150
-            imwrite ("../../PATCHES_PROCESSED/"+to_upper (weather)+"/camera"+to_string(camera_number)
+            imwrite ("../../PATCHES_PROCESSED/"+to_upper (weather)+"/camera"+to_string(camera_number)+"_"+to_string(rotation)+to_string(equalization)+to_string(blur)
             +"/"+weather_id+"_"+date+"_"+time[0]+time[1]+"."+time[2]+time[3]+"_C0"+to_string(camera_number)+"_"+to_string(parking_id)+".jpg", patch);
         }
     }
