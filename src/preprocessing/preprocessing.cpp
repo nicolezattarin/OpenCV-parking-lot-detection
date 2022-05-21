@@ -114,9 +114,7 @@ cv::Mat preprocess_patch(cv::Mat img, float rotation){
     cv::Point2f center(img.cols/2.0, img.rows/2.0);
     cv::Mat rot_mat = cv::getRotationMatrix2D(center, rotation*180./CV_PI, 1);
     cv::warpAffine(img, img, rot_mat, img.size());
-
-    //resize the image
-    cv::resize(img, img, cv::Size(150, 150));
+    
     return img;
 }
 
@@ -136,6 +134,7 @@ void preprocess_patches (vector<camera_picture> camera_pictures){
             cv::Mat patch = parkings[j].getImg();
             cv::Mat processed_patch = preprocess_patch(patch, rotation);
             parkings[j].setImg(processed_patch);
+
         }
     } 
 }

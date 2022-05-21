@@ -141,7 +141,6 @@ vector<camera_picture> ReadImages(int camera_number, string weather){
         const string pattern = 
         "/*/camera" + to_string(camera_number)+ "/*.jpg";
 
-
         string path = base_dir + pattern;
         vector<string> filenames = glob_path(base_dir + pattern);
 
@@ -233,13 +232,8 @@ void save_patches(vector<camera_picture> camera_images, string weather, int came
             cv::Mat patch = p.getImg();
             int parking_id = p.getId();
 
-            // DEBUG
-            cout << "patch " << patch.size() << endl;
-            imwrite ("../../PATCHES_PROCESSED/"+to_upper (weather)+"/"+date+"/camera"+to_string(camera_number)+"/"+weather_id+"_"+date+"_"+time+"_C0"+to_string(camera_number)+"_"+to_string(parking_id)+".jpg", patch);
+            cv::resize(patch, patch, cv::Size(150, 150)); //the CNN requires patches of 150x150
+            imwrite ("../../PATCHES_PROCESSED/"+to_upper (weather)+"/camera"+to_string(camera_number)+"/"+weather_id+"_"+date+"_"+time+"_C0"+to_string(camera_number)+"_"+to_string(parking_id)+".jpg", patch);
         }
     }
 }
-
-        
-
-

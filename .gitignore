@@ -175,3 +175,7 @@ src/camera_picture.o
 *.index
 *.png
 *.jpg
+src/preprocessing/main
+src/preprocessing/main
+*.cpp
+src/scratch.py

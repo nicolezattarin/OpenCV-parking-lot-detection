@@ -67,7 +67,9 @@ int main(int argc, char** argv){
     // imwrite("test_img/first_image_lots.jpg", first_image.getImgParkingLots());
     // vector<Parking> parkings = first_image.getParking();
     // for (int i=0; i<parkings.size(); i++){
-    //     imwrite("test_img/first_image_p"+to_string(parkings[i].getId())+".jpg", parkings[i].getImg());
+    //     cv::Mat patch = parkings[i].getImg();
+    //     cv::resize(patch, patch, cv::Size(150, 150));
+    //     imwrite("test_img/first_image_p"+to_string(parkings[i].getId())+".jpg", patch);
     // }
 
     return 0;
