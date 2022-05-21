@@ -39,6 +39,18 @@ camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image, cv::Ma
     m_capture_time = time;
 }
 
+camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image, cv::Mat image_parking_lots, 
+                                string path, string date, string time, float avg_rotation){
+    m_parkings = parkings;
+    m_image = image;
+    m_image_parking_lots = image_parking_lots;
+    m_path = path;
+    m_blob_img = cv::dnn::blobFromImage(image, 1, cv::Size(150, 150), cv::Scalar(104, 117, 123));
+    m_capture_date = date;
+    m_capture_time = time;
+    m_avg_rotation_angle = avg_rotation;
+}
+
 void camera_picture :: setParking(vector<Parking> parkings){
     m_parkings = parkings;
 }
@@ -69,4 +81,12 @@ void camera_picture :: set_avg_rotation(float avg_rotation){
 
 float camera_picture :: get_avg_rotation(){
     return m_avg_rotation_angle;
+}
+
+string camera_picture :: get_capture_date(){
+    return m_capture_date;
+}
+
+string camera_picture :: get_capture_time(){
+    return m_capture_time;
 }

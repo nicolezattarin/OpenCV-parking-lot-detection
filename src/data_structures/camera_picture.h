@@ -20,6 +20,7 @@ class camera_picture
         camera_picture(vector<Parking>, cv::Mat);
         camera_picture(vector<Parking>, cv::Mat, cv::Mat);
         camera_picture(vector<Parking>, cv::Mat, cv::Mat, string, string, string);
+        camera_picture(vector<Parking>, cv::Mat, cv::Mat, string, string, string, float);
         ~camera_picture(){};
 
         // setters/getters
@@ -31,6 +32,8 @@ class camera_picture
         cv::Mat getImgParkingLots();
         void set_avg_rotation(float);
         float get_avg_rotation();
+        string get_capture_date();
+        string get_capture_time();
 
     private:
         vector<Parking> m_parkings; //all the parkings in the image

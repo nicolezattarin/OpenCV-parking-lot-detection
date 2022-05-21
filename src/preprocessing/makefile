@@ -1,7 +1,7 @@
 CV_CFLAGS = `pkg-config --cflags opencv4`
 CV_LIBS = `pkg-config --libs opencv4`
-OBJ = main.o utils.o  ../data_structures/parking.o  ../data_structures/camera_picture.o
-INC = utils.h  ../data_structures/parking.h  ../data_structures/camera_picture.h
+OBJ = main.o utils.o  ../data_structures/parking.o  ../data_structures/camera_picture.o preprocessing.o
+INC = utils.h  ../data_structures/parking.h  ../data_structures/camera_picture.h preprocessing.h
 
 main: ${OBJ}
 	g++ -std=gnu++17 ${OBJ} ${CV_CFLAGS} ${CV_LIBS} -o main
