@@ -7,6 +7,7 @@ camera_picture :: camera_picture(){
     m_capture_date = ""; // default, non initialized
     m_capture_time = -1;// default, non initialized
     m_blob_img = cv::Mat();
+    m_avg_rotation_angle = 0;
 }
 
 camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image){
@@ -16,7 +17,7 @@ camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image){
     m_capture_date = ""; // default, non initialized
     m_capture_time = -1;// default, non initialized
     m_blob_img = cv::dnn::blobFromImage(image, 1, cv::Size(150, 150), cv::Scalar(104, 117, 123));
-
+    m_avg_rotation_angle = 0;
 }
 
 camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image, cv::Mat image_parking_lots){
@@ -26,6 +27,7 @@ camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image, cv::Ma
     m_capture_date = ""; // default, non initialized
     m_capture_time = -1;// default, non initialized
     m_blob_img = cv::dnn::blobFromImage(image, 1, cv::Size(150, 150), cv::Scalar(104, 117, 123));
+    m_avg_rotation_angle = 0;
 }
 
 camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image, cv::Mat image_parking_lots, 
@@ -37,6 +39,7 @@ camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image, cv::Ma
     m_blob_img = cv::dnn::blobFromImage(image, 1, cv::Size(150, 150), cv::Scalar(104, 117, 123));
     m_capture_date = date;
     m_capture_time = time;
+    m_avg_rotation_angle = 0;
 }
 
 camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image, cv::Mat image_parking_lots, 

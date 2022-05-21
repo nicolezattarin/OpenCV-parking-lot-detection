@@ -23,8 +23,8 @@ int main(int argc, char** argv){
     /*                      READ DATA AND INITIALIZE                        */
     /************************************************************************/
 
-    if (argc != 3){
-        cout << "usage: ./main <camera number> <weather>" << endl;
+    if (argc != 6){
+        cout << "usage: ./main <camera number> <weather> <rotation> <equalization> <blur>" << endl;
         return -1;}
 
     // read camera number
@@ -38,6 +38,26 @@ int main(int argc, char** argv){
     if (weather != "rainy" && weather != "sunny" && weather != "overcast" && weather != "all"){
         cout << "weather should be 'rainy', 'sunny', 'overcast' or 'all'" << endl;
         return -1;}
+
+    // read parameters for preprocessing
+    string rotation = argv[3];
+    if (rotation != "0" && rotation != "1"){
+        cout << "rotation should be either '0' or '1'" << endl;
+        return -1;}
+    bool rotation_flag = stoi(rotation);
+
+    string equalization = argv[4];
+    if (equalization != "0" && equalization != "1"){
+        cout << "equalization should be either '0' or '1'" << endl;
+        return -1;}
+    bool equalization_flag =  stoi(equalization);
+
+    string blur = argv[5];
+    if (blur != "0" && blur != "1"){
+        cout << "blur should be either '0' or '1'" << endl;
+        return -1;}
+    bool blur_flag =  stoi(blur);
+
     
     // read images: each image is an object camera_picture, 
     // with all the informations regarding each parking lot (vector of parking), the global camera image,
@@ -45,14 +65,14 @@ int main(int argc, char** argv){
 
     // now we have a vector with all the characteristics of the images, ready to process the patches
     cout << "\nreading images..." << endl;
-    vector<camera_picture> images = ReadImages(camera_number, weather);
+    vector<camera_picture> images = ReadImages(camera_number, weather, rotation_flag, equalization_flag, blur_flag);
 
     /************************************************************************/
     /*                            PROCESSING                                */
     /************************************************************************/
 
     cout << "\npreprocessing images..." << endl;
-    preprocess_patches(images);
+    preprocess_patches(images, rotation_flag);
 
     /************************************************************************/
     /*                            SAVING                                    */

@@ -93,13 +93,23 @@ vector<cv::Point> PolarToCartesian(float rho, float theta){
  * @param src 
  * @param dst 
  */
-void preprocess(cv::Mat& src, cv::Mat& dst){
-    //equalize the histogram of the image
-    vector<cv::Mat> hists(3);
-    vector<cv::Mat> equalized_hists(3);
-    equalize(src, dst, hists, equalized_hists, "RGB");
-    // blur image
-    cv::medianBlur(dst, dst, 5);
+void preprocess(cv::Mat& src, cv::Mat& dst, bool equalization, bool blur){
+    if (equalization){
+        //equalize the histogram of the image
+        vector<cv::Mat> hists(3);
+        vector<cv::Mat> equalized_hists(3);
+        equalize(src, dst, hists, equalized_hists, "RGB");
+    }
+    else{
+        dst = src.clone();
+    }
+    if (blur){
+        // blur image
+        cv::medianBlur(dst, dst, 5);
+    }
+    else{
+        dst = src.clone();
+    }
 }
 
 
@@ -109,12 +119,12 @@ void preprocess(cv::Mat& src, cv::Mat& dst){
  * @param input 
  * @param output 
  */
-cv::Mat preprocess_patch(cv::Mat img, float rotation){
-
-    cv::Point2f center(img.cols/2.0, img.rows/2.0);
-    cv::Mat rot_mat = cv::getRotationMatrix2D(center, rotation*180./CV_PI, 1);
-    cv::warpAffine(img, img, rot_mat, img.size());
-    
+cv::Mat preprocess_patch(cv::Mat img, float rotation, bool rotation_flag){
+    if (rotation_flag){
+        cv::Point2f center(img.cols/2.0, img.rows/2.0);
+        cv::Mat rot_mat = cv::getRotationMatrix2D(center, rotation*180./CV_PI, 1);
+        cv::warpAffine(img, img, rot_mat, img.size());
+    }
     return img;
 }
 
@@ -123,7 +133,7 @@ cv::Mat preprocess_patch(cv::Mat img, float rotation){
  * 
  * @param camera_pictures 
  */
-void preprocess_patches (vector<camera_picture> camera_pictures){
+void preprocess_patches (vector<camera_picture> camera_pictures, bool rotation_flag){
     // run over all the camera pictures
     for (int i = 0; i < camera_pictures.size(); i++){
         vector<Parking> parkings = camera_pictures[i].getParking();
@@ -132,7 +142,7 @@ void preprocess_patches (vector<camera_picture> camera_pictures){
         for (int j = 0; j < parkings.size(); j++){
             // preprocess the patch
             cv::Mat patch = parkings[j].getImg();
-            cv::Mat processed_patch = preprocess_patch(patch, rotation);
+            cv::Mat processed_patch = preprocess_patch(patch, rotation, rotation_flag);
             parkings[j].setImg(processed_patch);
 
         }

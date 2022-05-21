@@ -59,15 +59,14 @@ vector<Parking> ReadCameraCSV(string filename){
  * @return vector<camera_picture> 
  */
 
-vector<camera_picture> GetCameraPictures(vector<string> filenames, 
-                                        vector<Parking> parkings_coordinates, 
-                                        int camera_number, string weather){
+vector<camera_picture> GetCameraPictures(vector<string> filenames, vector<Parking> parkings_coordinates, 
+                                        int camera_number, string weather,  bool rotation, bool equalization, bool blur){
     vector<camera_picture> camera_images;
     //iterate over the images (pov of a camera)
     for (int i = 0; i < filenames.size(); i++){
         cv::Mat image = cv::imread(filenames[i]);
 
-        preprocess(image, image); //equalization and blur
+        preprocess(image, image, equalization, blur); //equalization and blur
 
         cv::Mat image_parking_lots = image.clone();//original image with squares in correspondence of parking lots
         vector<Parking> parkings;
@@ -93,19 +92,21 @@ vector<camera_picture> GetCameraPictures(vector<string> filenames,
         camera_images.push_back(camera_picture(parkings, image, image_parking_lots, filenames[i], date, time));
     }
 
-    // detect average angle of the main lines in the image, really not the most efficient way to do it, 
-    // but we leave optimization of this part for a second moment
-    float avg_angle = 0;
-    for (int i = 0; i < camera_images.size(); i++){
-        avg_angle+= get_average_rotation(camera_images[i].getImg(), 100, 200, 3, filenames[i], 300, weather, camera_number);
-    }
-    // cout << "average angle: " << avg_angle << endl;
+    if (rotation){
+        // detect average angle of the main lines in the image, really not the most efficient way to do it, 
+        // but we leave optimization of this part for a second moment
+        float avg_angle = 0;
+        for (int i = 0; i < camera_images.size(); i++){
+            avg_angle+= get_average_rotation(camera_images[i].getImg(), 100, 200, 3, filenames[i], 300, weather, camera_number);
+        }
+        // cout << "average angle: " << avg_angle << endl;
 
-    avg_angle /= camera_images.size();
-    for (int i = 0; i < camera_images.size(); i++){
-        camera_images[i].set_avg_rotation(-avg_angle); // rotation shouuld be the opposite of the average angle
+        avg_angle /= camera_images.size();
+        for (int i = 0; i < camera_images.size(); i++){
+            camera_images[i].set_avg_rotation(-avg_angle); // rotation shouuld be the opposite of the average angle
+        }
+        cout << "average angle: " << avg_angle << endl;
     }
-    cout << "average angle: " << avg_angle << endl;
     return camera_images;
 }
 
@@ -117,7 +118,7 @@ vector<camera_picture> GetCameraPictures(vector<string> filenames,
  * @return vector<Mat> 
  */
 
-vector<camera_picture> ReadImages(int camera_number, string weather){
+vector<camera_picture> ReadImages(int camera_number, string weather, bool rotation, bool equalization, bool blur){
     if (camera_number < 1 || camera_number > 9){
         cerr << "camera number should be from 1 to 9" << endl;}
     if (weather != "rainy" && weather != "sunny" && weather != "overcast" && weather != "all"){
@@ -145,7 +146,7 @@ vector<camera_picture> ReadImages(int camera_number, string weather){
         vector<string> filenames = glob_path(base_dir + pattern);
 
         //define a vector of camera pictures:
-        vector<camera_picture> camera_images = GetCameraPictures(filenames, parkings_coordinates, camera_number, weather);
+        vector<camera_picture> camera_images = GetCameraPictures(filenames, parkings_coordinates, camera_number, weather, rotation, equalization, blur);
         return camera_images;
     }
     else {
@@ -157,7 +158,7 @@ vector<camera_picture> ReadImages(int camera_number, string weather){
         string path = base_dir + pattern;
         vector<string> filenames = glob_path(base_dir + pattern);
         //define a vector of camera pictures:
-        vector<camera_picture> camera_images = GetCameraPictures(filenames, parkings_coordinates, camera_number, weather);
+        vector<camera_picture> camera_images = GetCameraPictures(filenames, parkings_coordinates, camera_number, weather, rotation, equalization, blur);
         return camera_images;
     }
   }

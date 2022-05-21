@@ -15,10 +15,9 @@
 #include "preprocessing.h"
 // void preprocess_image(cv::Mat, cv::Mat&);
 
-vector<camera_picture> GetCameraPictures(vector<string>, vector<Parking>, int , string );
-
+vector<camera_picture> GetCameraPictures(vector<string>, vector<Parking>, int , string, bool, bool, bool );
 vector<Parking> ReadCameraCSV(string);
-vector<camera_picture> ReadImages(int, string);
+vector<camera_picture> ReadImages(int, string, bool, bool, bool);
 char to_upper_char (char);
 string to_upper (string);
 void test(string);
