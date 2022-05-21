@@ -14,7 +14,7 @@ __pycache__/
 *out
 *.gz
 #CNN_model
-*/CNN_model/*
+src/CNNClassifier/CNN_model*
 
 # data 
 CNRPark-Patches-150x150*
