@@ -53,7 +53,7 @@ make
 Let us first providea proof of the performances of the implemented CNN classifier. The following figure shows the history for train, test and validation accuracy/loss of a model trained with 10 epochs and batch size 32.
 
 <p align="center">
-  <img src="figs/10_epochs_32_batch_history.png" width="400" />
+  <img src="figs/10_epochs_32_batch_history.png" width="550" />
 </p>
 
 An example of final result, i.e. result after post-processing, is shown in the following figure:
