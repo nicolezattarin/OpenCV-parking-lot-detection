@@ -177,9 +177,10 @@ src/camera_picture.o
 *.png
 *.jpg
 src/preprocessing/main
-src/preprocessing/main
-*.cpp
+src/postprocessing/main
 src/scratch.py
 *.csv
 *.txt
 *.txt
+src/scratch.cpp
+src/postprocessing/main
