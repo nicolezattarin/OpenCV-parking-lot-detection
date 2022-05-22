@@ -121,8 +121,9 @@ void preprocess(cv::Mat& src, cv::Mat& dst, bool equalization, bool blur){
  */
 cv::Mat preprocess_patch(cv::Mat img, float rotation, bool rotation_flag){
     if (rotation_flag){
+
         cv::Point2f center(img.cols/2.0, img.rows/2.0);
-        cv::Mat rot_mat = cv::getRotationMatrix2D(center, rotation*180./CV_PI, 1);
+        cv::Mat rot_mat = cv::getRotationMatrix2D(center, rotation*180./CV_PI, 1.2);
         cv::warpAffine(img, img, rot_mat, img.size());
     }
     return img;

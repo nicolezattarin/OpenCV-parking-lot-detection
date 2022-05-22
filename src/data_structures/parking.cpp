@@ -31,11 +31,11 @@ Parking :: Parking(int id, int x, int y, int width, int height, cv::Mat image){
 }
 
 // setters/getters
-void Parking :: setEmpty(bool isEmpty){
+void Parking :: setStatus(bool isEmpty){
     m_isFree = isEmpty;
 }
 
-bool Parking :: isEmpty(){
+bool Parking :: getStatus(){
     return m_isFree;
 }
 

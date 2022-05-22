@@ -21,8 +21,8 @@ class Parking
         ~Parking(){};
 
         // setters/getters
-        void setEmpty(bool);
-        bool isEmpty();
+        void setStatus(bool);
+        bool getStatus();
         void setId(int);
         int getId();
         void setX(int);
