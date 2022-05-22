@@ -99,13 +99,34 @@ void preprocess(cv::Mat& src, cv::Mat& dst, bool equalization, bool blur){
         vector<cv::Mat> hists(3);
         vector<cv::Mat> equalized_hists(3);
         equalize(src, dst, hists, equalized_hists, "BGR2HSV");
+
+        
     }
     else{
         dst = src.clone();
     }
     if (blur){
         // blur image
-        cv::medianBlur(dst, dst, 5);
+        cv::medianBlur(dst, dst, 2);
+        //relative thresholding on brightness
+        float percentage = 0.2;
+        double max_brightness = 0;
+        double min_brightness = 0;
+
+        std::vector<cv::Mat> channels(3);
+        cv::Mat thresholded_img = dst.clone();
+        cv::cvtColor(thresholded_img, thresholded_img, cv::COLOR_BGR2HSV);
+        cv::split(thresholded_img, channels);
+        
+        //thresholding on channel 2
+        cv::minMaxIdx(channels[2], &min_brightness, &max_brightness);
+        float high_threshold = max_brightness-max_brightness*percentage;
+        float low_threshold = min_brightness+min_brightness*percentage;
+
+        cv::inRange(channels[2], low_threshold, high_threshold, channels[2]);
+        cv::merge(channels, thresholded_img);
+        cv::cvtColor(thresholded_img, thresholded_img, cv::COLOR_HSV2BGR); //change back to BGR
+        thresholded_img.copyTo(dst);
     }
     else{
         dst = src.clone();
