@@ -15,6 +15,7 @@ __pycache__/
 *.gz
 #CNN_model
 src/CNNClassifier/CNN_model*
+results/*
 
 # data 
 CNRPark-Patches-150x150*
@@ -179,3 +180,6 @@ src/preprocessing/main
 src/preprocessing/main
 *.cpp
 src/scratch.py
+*.csv
+*.txt
+*.txt
