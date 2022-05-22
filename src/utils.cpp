@@ -314,8 +314,6 @@ void ReadClassifiedSamples(camera_picture& images, int camera_number,
     else{
         preprocessing = "none";
     }
-
-    cout << "Reading classified samples from " << preprocessing << " preprocessing" << endl;
     
     string path = "../../results/CNR/camera"+to_string(camera_number)+"/"+to_lower(weather)+
                     "/classified_sample_preproc_"+preprocessing+".csv";
@@ -458,6 +456,7 @@ void save_images_with_lots(vector<camera_picture>& images, int camera_number, st
     else{
         preprocessing = "none";
     }
+    cout << "Reading classified samples from " << preprocessing << " preprocessing" << endl;
 
     for (int i=0; i<images.size(); i++){
         string path = "../../results/CNR/camera"+to_string(camera_number)+"/detected_"+weather+"_"+preprocessing+"/";
