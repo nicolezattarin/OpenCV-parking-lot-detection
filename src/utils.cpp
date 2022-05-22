@@ -1,10 +1,11 @@
 #include "utils.h"
+#include <filesystem>
+namespace fs = std::filesystem;
 
 int ORIGINAL_WIDTH = 2592;
 int ORIGINAL_HEIGHT = 1944;
 int FINAL_WIDTH = 1000;
 int FINAL_HEIGHT = 750;
-#include <filesystem>
 
 
 /**
@@ -257,8 +258,9 @@ void save_patches(vector<camera_picture> camera_images, string weather, int came
 
             string dir = "../../PATCHES_PROCESSED/"+to_upper (weather)+"/camera"+
                         to_string(camera_number)+"_"+to_string(rotation)+to_string(equalization)+to_string(blur);
-            fs::create_directories(dir);
-
+            if (!fs::exists(dir)){
+                fs::create_directories(dir);
+            }
             imwrite (dir+"/"+weather_id+"_"+date+"_"+time[0]+time[1]+"."+time[2]+time[3]+"_C0"+to_string(camera_number)+"_"+to_string(parking_id)+".jpg", patch);
         }
     }
@@ -465,6 +467,10 @@ void save_images_with_lots(vector<camera_picture>& images, int camera_number, st
 
     for (int i=0; i<images.size(); i++){
         string path = "../../results/CNR/camera"+to_string(camera_number)+"/detected_"+weather+"_"+preprocessing+"/";
+        if (!fs::exists(path)){
+            fs::create_directories(path);
+        }
+
         string filename = images[i].get_capture_date()+"_"+images[i].get_capture_time()+".jpg";
         cv::imwrite(path+filename, images[i].getImgParkingLots());
     }
