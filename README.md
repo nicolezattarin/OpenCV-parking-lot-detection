@@ -66,5 +66,5 @@ Finally, we also provide the tools to evaluate the performances of our model and
 The following figure shows the distribution of confidence scores for the detected parking lots and the counting of free/busy lots in absence of any pre-processing, which corresponds to an accuracy of 0.85.
 
 <p align="center">
-  <img src="figs/confidence_none.png" width="400" />
+  <img src="figs/confidence_none.png" width="750" />
 </p>
