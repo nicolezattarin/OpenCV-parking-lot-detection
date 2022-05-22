@@ -88,7 +88,7 @@ int main(int argc, char** argv){
 
     // save images with lots
     cout << "\nsaving images with lots..." << endl;
-    save_images_with_lots(images, camera_number, weather);
+    save_images_with_lots(images, camera_number, weather, rotation_flag, equalization_flag, blur_flag);
    
     return 0;
 }
