@@ -48,3 +48,23 @@ cd ../postprocessing
 make
 ./main 1 sunny 0 0 0
 ```
+
+### Results
+Let us first providea proof of the performances of the implemented CNN classifier. The following figure shows the history for train, test and validation accuracy/loss of a model trained with 10 epochs and batch size 32.
+
+<p align="center">
+  <img src="figs/10_epochs_32_batch_history.png" width="400" />
+</p>
+
+An example of final result, i.e. result after post-processing, is shown in the following figure:
+
+<p align="center">
+  <img src="figs/2015-11-12_1239.jpg" width="400" />
+</p>
+
+Finally, we also provide the tools to evaluate the performances of our model and test different possible pre-processing configurations.
+The following figure shows the distribution of confidence scores for the detected parking lots and the counting of free/busy lots in absence of any pre-processing, which corresponds to an accuracy of 0.85.
+
+<p align="center">
+  <img src="figs/confidence_none.png" width="400" />
+</p>
