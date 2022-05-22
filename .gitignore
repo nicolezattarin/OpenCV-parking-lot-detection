@@ -15,6 +15,7 @@ __pycache__/
 *.gz
 #CNN_model
 results/*
+report/*
 
 # data 
 CNRPark-Patches-150x150*
