@@ -174,8 +174,8 @@ lab5_2022.pdf
 src/camera_picture.o
 *.o
 *.index
-*.png
-*.jpg
+*PATCHES_PROCESSED*
+
 src/preprocessing/main
 src/postprocessing/main
 src/scratch.py
