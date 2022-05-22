@@ -108,10 +108,11 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--camera_number", type=int, default=1)
 parser.add_argument("--weather", type=str, default='sunny')
-parser.add_argument("--nimgs", type=int, default=500)
+parser.add_argument("--nimgs", type=int, default=None)
 parser.add_argument("--preprocessing", type=str, default="none")
 parser.add_argument("--dir_index", type=str, default="000") # eg camera_000, camera_001 according to the kind of preprocess, 
-                                                            # should be made automatic in a second version of the code
+                                                            # should be made automatic in a second version of the code order 
+                                                            # is rot-eq-blur as in preprocessing/main.cpp 
 
 def main (camera_number, weather, nimgs, preprocessing, dir_index):
 
@@ -122,7 +123,7 @@ def main (camera_number, weather, nimgs, preprocessing, dir_index):
     #save results 
     if not os.path.exists("../../results/CNR/camera{}/{}".format(camera_number, weather)):
         os.makedirs("../../results/CNR/camera{}/{}".format(camera_number, weather))
-    classified_sample.to_csv("../../results/CNR/camera{}/{}/classified_sample_preproc_{}.csv".format(camera_number, weather, preprocessing))
+    classified_sample.to_csv("../../results/CNR/camera{}/{}/classified_sample_preproc_{}.csv".format(camera_number, weather, preprocessing), index=False)
     file = open("../../results/CNR/camera{}/{}/accuracy_preproc_{}.txt".format(camera_number, weather, preprocessing), "w")
     file.write("accuracy: {}".format(accuracy))
     file.close()
