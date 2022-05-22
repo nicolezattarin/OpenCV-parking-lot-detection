@@ -98,7 +98,7 @@ void preprocess(cv::Mat& src, cv::Mat& dst, bool equalization, bool blur){
         //equalize the histogram of the image
         vector<cv::Mat> hists(3);
         vector<cv::Mat> equalized_hists(3);
-        equalize(src, dst, hists, equalized_hists, "RGB");
+        equalize(src, dst, hists, equalized_hists, "BGR2HSV");
     }
     else{
         dst = src.clone();
