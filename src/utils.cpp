@@ -4,6 +4,7 @@ int ORIGINAL_WIDTH = 2592;
 int ORIGINAL_HEIGHT = 1944;
 int FINAL_WIDTH = 1000;
 int FINAL_HEIGHT = 750;
+#include <filesystem>
 
 
 /**
@@ -253,8 +254,12 @@ void save_patches(vector<camera_picture> camera_images, string weather, int came
             int parking_id = p.getId();
 
             cv::resize(patch, patch, cv::Size(150, 150)); //the CNN requires patches of 150x150
-            imwrite ("../../PATCHES_PROCESSED/"+to_upper (weather)+"/camera"+to_string(camera_number)+"_"+to_string(rotation)+to_string(equalization)+to_string(blur)
-            +"/"+weather_id+"_"+date+"_"+time[0]+time[1]+"."+time[2]+time[3]+"_C0"+to_string(camera_number)+"_"+to_string(parking_id)+".jpg", patch);
+
+            string dir = "../../PATCHES_PROCESSED/"+to_upper (weather)+"/camera"+
+                        to_string(camera_number)+"_"+to_string(rotation)+to_string(equalization)+to_string(blur);
+            fs::create_directories(dir);
+
+            imwrite (dir+"/"+weather_id+"_"+date+"_"+time[0]+time[1]+"."+time[2]+time[3]+"_C0"+to_string(camera_number)+"_"+to_string(parking_id)+".jpg", patch);
         }
     }
 }

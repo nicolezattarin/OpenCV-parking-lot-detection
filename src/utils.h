@@ -13,6 +13,8 @@
 #include <sstream>
 #include "data_structures/camera_picture.h"
 #include "preprocessing/preprocessing.h"
+#include <filesystem>
+
 // void preprocess_image(cv::Mat, cv::Mat&);
 
 vector<camera_picture> GetCameraPictures(vector<string>, vector<Parking>, int , string, bool, bool, bool );

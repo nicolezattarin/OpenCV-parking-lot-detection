@@ -107,7 +107,7 @@ void preprocess(cv::Mat& src, cv::Mat& dst, bool equalization, bool blur){
     }
     if (blur){
         // blur image
-        cv::medianBlur(dst, dst, 2);
+        cv::medianBlur(dst, dst, 5);
         //relative thresholding on brightness
         float percentage = 0.2;
         double max_brightness = 0;

@@ -14,7 +14,6 @@ __pycache__/
 *out
 *.gz
 #CNN_model
-src/CNNClassifier/CNN_model*
 results/*
 
 # data 
