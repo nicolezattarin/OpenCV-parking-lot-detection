@@ -30,6 +30,6 @@ void ReadClassifiedSamples(camera_picture&, int, string, bool, bool, bool);
 bool check_if_free(string, string);
 void draw_free_lots(vector<camera_picture>& );
 void draw_free_lots(camera_picture& );
-void save_images_with_lots(vector<camera_picture>& , int , string );
+void save_images_with_lots(vector<camera_picture>& , int , string, bool, bool, bool );
 
 #endif // UTILS_H
