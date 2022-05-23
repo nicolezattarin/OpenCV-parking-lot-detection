@@ -74,7 +74,7 @@ The following figure shows the distribution of confidence scores for the detecte
 
 Main requirements are:
 
-- Compiler (g++) comptible with C++17
+- Compiler (g++) compatible with C++17
 - Tensorflow >= 2.5
 - OpenCV 4.5
 
