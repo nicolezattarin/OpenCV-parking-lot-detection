@@ -4,7 +4,7 @@ We provide a possible strategy for detecting parking lots in a given camera imag
 
 The code is, at the state of art, adapted to analyze images coming from [CNRPark+EXT](http://cnrpark.it) dataset, even though we plan to extend the study to [PKLot](https://web.inf.ufpr.br/vri/databases/parking-lot-database/) as well.
 
-### Structure of the code
+### Typical workflow
 The src folder contains the code for the classifier, pre- and post-processing of images,data are meant to be saved in the parent directory.
 A typical workflow follows.
 To download the datasets run:
