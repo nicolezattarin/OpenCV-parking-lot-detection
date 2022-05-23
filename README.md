@@ -69,3 +69,14 @@ The following figure shows the distribution of confidence scores for the detecte
 <p align="center">
   <img src="figs/confidence_none.png" width="750" />
 </p>
+
+***Requirements***
+
+Main requirements are:
+
+- Compiler (g++) comptible with C++17
+- Tensorflow >= 2.5
+- OpenCV 4.5
+
+Other minor python packages that we use are: pandas, numpy, os, argparse, waring, matplotlib, seaborn, tensorboard, errno, cv2
+
