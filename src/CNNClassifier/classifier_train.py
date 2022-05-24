@@ -179,8 +179,8 @@ parser.add_argument('--save', type=bool , default=False, help='if truethe images
 
 def main(epochs, batch_size, load, save):
     from CNNClassifier import CNNClassifier
-    busy_data = "../CNRPark-Patches-150x150/*/busy/*.jpg"
-    free_data = "../CNRPark-Patches-150x150/*/free/*.jpg"
+    busy_data = "../../CNRPark-Patches-150x150/*/busy/*.jpg"
+    free_data = "../../CNRPark-Patches-150x150/*/free/*.jpg"
     model_dir = "CNN_model/{}_epochs_{}_batch_classifier".format(epochs, batch_size)
     
     if load:

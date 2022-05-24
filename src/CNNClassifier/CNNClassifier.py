@@ -10,6 +10,13 @@ from tensorflow.keras.layers import Conv2D, Flatten, Dense, MaxPooling2D, Dropou
 from tensorflow.keras.models import Sequential
 
 class CNNClassifier():
+    """
+    CNN-based classifier with Tensorflow
+    parameters:
+        img_height: height of the image
+        img_width: width of the image
+    
+    """
 
     def __init__(self, img_height, img_width):
         self.img_height = img_height
@@ -17,6 +24,15 @@ class CNNClassifier():
         self.trained = False
 
     def _get_generators(self, train_directory, val_directory, batch_size):
+        """
+        Get the training and validation generators
+        parameters:
+            train_directory: directory of training data
+            val_directory: directory of validation data
+            batch_size: batch size
+        """
+
+        # set up data augmentation parameters 
         rotation_range = 90
         width_shift_range = 0.5
         height_shift_range = 0.2
@@ -45,6 +61,14 @@ class CNNClassifier():
         return train_generator, validation_generator
 
     def _create_model(self, img_height, img_width, dropout=0.5):
+        """
+        create the model
+        parameters:
+            img_height: height of the image
+            img_width: width of the image
+            dropout: dropout rate
+        """
+        
         # shape note: if you have 30 images of 50x50 pixels in RGB (3 channels), 
         # the shape of your input data is (30,50,50,3).
 
@@ -68,13 +92,23 @@ class CNNClassifier():
         return model
 
     def train(self, train_dir="../classifier_data/train" , val_dir="../classifier_data/val", 
-                    save_dir = "CNN_model", dropout=0.5, batch_size=32, epochs=15):
+                    save_dir = "CNN_model", dropout=0.5, batch_size=32, epochs=10):
+        """
+        train the model
+        parameters:
+            train_dir: directory of training data
+            val_dir: directory of validation data
+            save_dir: directory to save the model
+            dropout: dropout rate
+            batch_size: batch size
+            epochs: number of epochs
+        """
 
         if self.trained == True: 
             raise Exception("Model has already been trained.")
 
         img_height, img_width = self.img_width, self.img_width
-        self.model = self._create_model(img_height, img_width)
+        self.model = self._create_model(img_height, img_width, dropout)
         train_generator, validation_generator = self._get_generators(train_dir, val_dir, batch_size=batch_size)
         self.history = self.model.fit(train_generator, epochs=epochs, verbose=1, validation_data=validation_generator)
 

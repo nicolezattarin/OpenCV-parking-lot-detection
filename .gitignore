@@ -176,6 +176,8 @@ src/camera_picture.o
 *.index
 *PATCHES_PROCESSED*
 PKLot/*
+PKLot_reduced/*
+
 
 src/preprocessing/main
 src/postprocessing/main
