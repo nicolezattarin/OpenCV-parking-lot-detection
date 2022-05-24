@@ -175,6 +175,7 @@ src/camera_picture.o
 *.o
 *.index
 *PATCHES_PROCESSED*
+PKLot/*
 
 src/preprocessing/main
 src/postprocessing/main
@@ -185,3 +186,4 @@ src/scratch.py
 src/scratch.cpp
 src/postprocessing/main
 src/CNNClassifier/plots.ipynb
+*.tar
