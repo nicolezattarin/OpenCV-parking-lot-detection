@@ -18,6 +18,9 @@ class Parking
         Parking();
         Parking(int, int, int, int, int);
         Parking(int, int, int, int, int, cv::Mat);
+        Parking(int, int, int, float, cv::Point, cv::Point, cv::Point, cv::Point, cv::Point);
+        Parking(int, int, int, cv::Mat, float, cv::Point, cv::Point, cv::Point, cv::Point, cv::Point);
+
         ~Parking(){};
 
         // setters/getters
@@ -35,6 +38,13 @@ class Parking
         int getHeight();
         void setImg(cv::Mat);
         cv::Mat getImg();
+        void setAngle(float);
+        float getAngle();
+        cv::Point getLowerLeft();
+        cv::Point getUpperRight();
+        cv::Point getLowerRight();
+        cv::Point getUpperLeft();
+        cv::Point getCenter();
 
     private:
         bool m_isFree;
@@ -43,6 +53,12 @@ class Parking
         int m_y;
         int m_width;
         int m_height;
+        float m_angle;
+        cv::Point m_center;
+        cv::Point m_lower_left;
+        cv::Point m_upper_right;
+        cv::Point m_lower_right;
+        cv::Point m_upper_left;
         cv::Mat m_image; //image of the specific slot
 };
 

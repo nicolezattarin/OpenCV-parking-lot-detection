@@ -8,6 +8,10 @@ Parking :: Parking(){
     m_width = -1;
     m_height = -1; 
     m_image = cv::Mat();
+    m_lower_left = cv::Point();
+    m_upper_right = cv::Point();
+    m_lower_right = cv::Point();
+    m_upper_left = cv::Point();
 }
 
 Parking :: Parking(int id, int x, int y, int width, int height){
@@ -18,6 +22,11 @@ Parking :: Parking(int id, int x, int y, int width, int height){
     m_y = y;
     m_width = width;
     m_height = height;
+    //assuming that if someone uses this constructor, the patch's axes are parallel to the image axes
+    m_lower_left = cv::Point(x, y);
+    m_upper_right = cv::Point(x + width, y + height);
+    m_lower_right = cv::Point(x + width, y);
+    m_upper_left = cv::Point(x, y + height);
 }
 
 Parking :: Parking(int id, int x, int y, int width, int height, cv::Mat image){
@@ -28,8 +37,47 @@ Parking :: Parking(int id, int x, int y, int width, int height, cv::Mat image){
     m_y = y;
     m_width = width;
     m_height = height;
+    //assuming that if someone uses this constructor, the patch's axes are parallel to the image axes
+    m_lower_left = cv::Point(x, y);
+    m_upper_right = cv::Point(x + width, y + height);
+    m_lower_right = cv::Point(x + width, y);
+    m_upper_left = cv::Point(x, y + height);
 }
 
+Parking :: Parking(int id, int width, int height, float angle, cv::Point center,
+                cv::Point lower_left, cv::Point upper_right, cv::Point lower_right, cv::Point upper_left){
+    m_isFree = true;
+    m_id = id;
+    m_image = cv::Mat();
+    m_x = -1; //not initialized
+    m_y = -1; //not initialized
+    m_width = width;
+    m_height = height;
+    m_angle = angle;
+    m_center = center;
+
+    m_lower_left = lower_left;
+    m_upper_right = upper_right;
+    m_lower_right = lower_right;
+    m_upper_left = upper_left;
+}
+Parking :: Parking(int id, int width,  int height, cv::Mat img, float angle, cv::Point center,
+                cv::Point lower_left, cv::Point upper_right, cv::Point lower_right, cv::Point upper_left){
+    m_isFree = true;
+    m_id = id;
+    m_image = img;
+    m_x = -1; //not initialized
+    m_y = -1; //not initialized
+    m_width = width;
+    m_height = height;
+    m_angle = angle;
+    m_center = center;
+
+    m_lower_left = lower_left;
+    m_upper_right = upper_right;
+    m_lower_right = lower_right;
+    m_upper_left = upper_left;
+}
 // setters/getters
 void Parking :: setStatus(bool isEmpty){
     m_isFree = isEmpty;
@@ -86,3 +134,32 @@ void Parking :: setImg(cv::Mat img){
 cv::Mat Parking :: getImg(){
     return m_image;
 }
+
+float Parking :: getAngle(){
+    return m_angle;
+}
+
+void Parking :: setAngle(float angle){
+    m_angle = angle;
+}
+
+cv::Point Parking :: getLowerLeft(){
+    return m_lower_left;
+}
+
+cv:: Point Parking :: getUpperRight(){
+    return m_upper_right;
+}
+
+cv::Point Parking :: getLowerRight(){
+    return m_lower_right;
+}
+
+cv::Point Parking :: getUpperLeft(){
+    return m_upper_left;
+}
+
+cv::Point Parking :: getCenter(){
+    return m_center;
+}
+
