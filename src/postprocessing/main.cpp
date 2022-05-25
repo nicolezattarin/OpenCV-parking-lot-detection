@@ -16,8 +16,8 @@ int main(int argc, char** argv){
     /*                      INITIALIZE                        */
     /************************************************************************/
 
-    if (argc != 6){
-        cout << "usage: ./main <camera number> <weather> <rotation> <equalization> <blur>" << endl;
+    if (argc != 7){
+        cout << "usage: ./main <camera number> <weather> <rotation> <equalization> <blur> <dataset>" << endl;
         return -1;}
 
     // read camera number
@@ -51,6 +51,11 @@ int main(int argc, char** argv){
         return -1;}
     bool blur_flag =  stoi(blur);
 
+    string dataset = argv[6];
+    if (dataset != "cnr" && dataset != "pklot"){
+        cout << "dataset should be either 'cnr' or 'pklot'" << endl;
+        return -1;}
+
     cout << "camera number: " << camera_number << endl;
     cout << "weather: " << weather << endl;
     cout << "rotation: " << rotation_flag << endl;
@@ -59,14 +64,14 @@ int main(int argc, char** argv){
 
     // read camera pictures
     cout << "\nreading images..." << endl;
-    vector<camera_picture> images = ReadImages(camera_number, weather, rotation_flag, equalization_flag, blur_flag);
+    vector<camera_picture> images = ReadImages(camera_number, weather, rotation_flag, equalization_flag, blur_flag, dataset);
 
     /************************************************************************/
     /*                 READ CLASSIFICATION RESULTS                          */
     /************************************************************************/
 
     /** 
-     * 
+     * CNR:
      * We saved the results of the classification in a file at path 
      * "../../results/CNR/camera{}/{}/classified_sample_preproc_{}.csv".format(camera_number, weather, preprocessing)
      * The file contains the following columns:
@@ -80,15 +85,15 @@ int main(int argc, char** argv){
 
     // read classified samples
     cout << "\nreading classified samples and setting the status of each lot..." << endl;
-    ReadClassifiedSamples(images, camera_number, weather, rotation_flag, equalization_flag,blur_flag);
+    ReadClassifiedSamples(images, camera_number, weather, rotation_flag, equalization_flag, blur_flag, dataset);
 
     // draw free lots
     cout << "\ndrawing free lots..." << endl;
-    draw_free_lots(images);
+    draw_free_lots(images, dataset);
 
     // save images with lots
     cout << "\nsaving images with lots..." << endl;
-    save_images_with_lots(images, camera_number, weather, rotation_flag, equalization_flag, blur_flag);
+    save_images_with_lots(images, camera_number, weather, rotation_flag, equalization_flag, blur_flag, dataset);
    
     return 0;
 }
