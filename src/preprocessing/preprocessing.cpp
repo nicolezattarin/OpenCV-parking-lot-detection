@@ -153,9 +153,11 @@ cv::Mat preprocess_patch(cv::Mat img, float rotation, bool rotation_flag){
  * 
  * @param camera_pictures 
  */
-void preprocess_patches (vector<camera_picture> camera_pictures, bool rotation_flag){
+void preprocess_patches (vector<camera_picture> camera_pictures, bool rotation_flag, string dataset){
     // run over all the camera pictures
+
     for (int i = 0; i < camera_pictures.size(); i++){
+        if (dataset == "pklot") break;
         vector<Parking> parkings = camera_pictures[i].getParking();
         float rotation = camera_pictures[i].get_avg_rotation();
         // run over all the patches
