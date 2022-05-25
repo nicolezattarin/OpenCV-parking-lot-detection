@@ -91,7 +91,7 @@ class CNNClassifier():
         print(model.summary())
         return model
 
-    def train(self, train_dir="../classifier_data/train" , val_dir="../classifier_data/val", 
+    def train(self, train_dir , val_dir,
                     save_dir = "CNN_model", dropout=0.5, batch_size=32, epochs=10):
         """
         train the model
