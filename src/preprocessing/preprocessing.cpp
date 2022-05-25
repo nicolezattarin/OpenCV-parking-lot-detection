@@ -99,8 +99,6 @@ void preprocess(cv::Mat& src, cv::Mat& dst, bool equalization, bool blur){
         vector<cv::Mat> hists(3);
         vector<cv::Mat> equalized_hists(3);
         equalize(src, dst, hists, equalized_hists, "BGR2HSV");
-
-        
     }
     else{
         dst = src.clone();
