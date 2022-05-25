@@ -189,3 +189,4 @@ src/scratch.cpp
 src/postprocessing/main
 src/CNNClassifier/plots.ipynb
 *.tar
+src/preprocessing/test_img/*
