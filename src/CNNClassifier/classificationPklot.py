@@ -30,9 +30,9 @@ def get_accuracy(data, labels):
     return:
         accuracy
     """
-    data = data.sort_values(by=['filename'])
-    label = labels.sort_values(by=['filename'])
-    data['correct'] = data['class_id'] == label['occupied']
+    data = data.sort_values(by=['filename'], ignore_index=True)
+    labels = labels.sort_values(by=['filename'], ignore_index=True)
+    data['correct'] = data['class_id'] == labels['occupied']
     return data['correct'].mean()
 
 
