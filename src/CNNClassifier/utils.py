@@ -199,7 +199,7 @@ def classify_data (camera_number, weather, dir_index, dataset, batch_size=32, ep
 
     dir = "../../"+dataset.upper()+"_PATCHES_PROCESSED/"+weather.upper()+"/camera"+str(camera_number)+"_"+dir_index
     import os
-    if not os.path.exists(dir): raise Exception("path does not exist")
+    if not os.path.exists(dir): raise Exception("path {} does not exist".format(dir))
         
     import glob
     filenames = glob.glob(dir+"/*.jpg")

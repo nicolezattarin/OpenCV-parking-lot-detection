@@ -38,22 +38,28 @@ def get_accuracy(data, labels):
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--camera_number", type=int, default=3)
-parser.add_argument("--weather", type=str, default='rainy')
-parser.add_argument("--preprocessing", type=str, default="none")
-parser.add_argument("--dir_index", type=str, default="000") # eg camera_000, camera_001 according to the kind of preprocess, 
-                                                            # should be made automatic in a second version of the code order 
-                                                            # is rot-eq-blur as in preprocessing/main.cpp 
+parser.add_argument("--camera_number", type=int, default=1)
+parser.add_argument("--weather", type=str, default='sunny')
+parser.add_argument("--rot", type=int, default=0)
+parser.add_argument("--eq", type=int, default=0)
+parser.add_argument("--blur", type=int, default=0)
 
-def main (camera_number, weather, preprocessing, dir_index):
+def main (camera_number, weather, rot, eq, blur):
     """
     params:
         camera_number: camera number
         weather: weather
-        preprocessing: preprocessing
-        dir_index: directory index
+        rot: flag for rotation preprocessing
+        eq: flag for equalization preprocessing
+        blur: flag for blur preprocessing
     """
     from utils import classify_data
+    print(rot, eq, blur)
+    dir_index = str(int(rot))+str(int(eq))+str(int(blur))
+    preprocessing = ""
+    if rot: preprocessing += "rot"
+    if eq: preprocessing += "eq"
+    if blur: preprocessing += "blur"
 
     classified_sample = classify_data (camera_number, weather, dir_index, batch_size=32, epochs=10, dataset="PKLOT")
     classified_sample['date'] = classified_sample['filename'].apply(lambda x: x[:x.rfind("_")-6])

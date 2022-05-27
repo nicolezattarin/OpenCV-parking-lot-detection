@@ -48,24 +48,29 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--camera_number", type=int, default=1)
 parser.add_argument("--weather", type=str, default='sunny')
 parser.add_argument("--nimgs", type=int, default=None)
-parser.add_argument("--preprocessing", type=str, default="none")
-parser.add_argument("--dir_index", type=str, default="000") 
-                                                            
+parser.add_argument("--rot", type=int, default=0)
+parser.add_argument("--eq", type=int, default=0)
+parser.add_argument("--blur", type=int, default=0)
 
-def main (camera_number, weather, nimgs, preprocessing, dir_index):
+                                                        
+def main (camera_number, weather, nimgs, rot, eq, blur):
     """
     classifies the images in the given camera and weather
     params:
         camera_number: camera number
         weather: weather
         nimgs: number of images to classify
-        preprocessing: preprocessing
-        dir_index: directory index, eg camera_000, camera_001 according to the kind of preprocess, 
-                    should be made automatic in a second version of the code order
-                    is rot-eq-blur as in preprocessing/main.cpp
+        rot: flag for rotation preprocessing
+        eq: flag for equalization preprocessing
+        blur: flag for blur preprocessing
 
     """
     from utils import classify_data
+    dir_index = str(int(rot))+str(int(eq))+str(int(blur))
+    preprocessing = ""
+    if rot: preprocessing += "rot"
+    if eq: preprocessing += "eq"
+    if blur: preprocessing += "blur"
 
     classified_sample = classify_data (camera_number, weather, dir_index, batch_size=32, epochs=10, n_imgs=nimgs, dataset="CNR")
     labels = get_labels(camera_number, weather)
