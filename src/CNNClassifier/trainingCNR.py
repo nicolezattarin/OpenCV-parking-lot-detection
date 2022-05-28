@@ -11,53 +11,7 @@ import cv2
 import errno
 
 tf.io.gfile = tb.compat.tensorflow_stub.io.gfile
-from utils import prepare_data, get_test_generator, frozen_graph_maker
-
-def plot_history(history_trend, epochs, batch_size):
-    # PLOT HISTORY OF VALIDATION AND TRAINING ACCURACY/LOSS
-    sns.set_theme(style="white", font_scale=1.5, palette="Dark2")
-
-    if epochs == 15: 
-        epochs_range = range(1, len(history_trend["accuracy"]))
-        history_trend['accuracy'], history_trend['val_accuracy'], history_trend['loss'], history_trend['val_loss'] =\
-            history_trend['accuracy'][:-1], history_trend['val_accuracy'][:-1], history_trend['loss'][:-1], history_trend['val_loss'][:-1]
-    else: epochs_range = range(1, len(history_trend["accuracy"]) +1 )
-    
-    #load test results 
-    if not os.path.exists("CNN_modelCNR/{}_epochs_{}_batch_test_results.npy".format(epochs, batch_size)):
-        print("test data not found")
-        return
-    test_results = np.load("CNN_modelCNR/{}_epochs_{}_batch_test_results.npy".format(epochs, batch_size))
-    lw=2
-    ls='--'
-    m = 'o'
-    ms = 8
-    
-    fig, ax = plt.subplots(figsize=(10,6))
-    sns.lineplot(epochs_range, history_trend['accuracy'], lw=lw, ls=ls, label='train', ax=ax, marker='o', markersize=ms)
-    sns.lineplot(epochs_range, history_trend['val_accuracy'], lw=lw, ls=ls, label='validation', ax=ax, marker='o', markersize=ms)
-
-    # An inner plot to show the peak frequency
-    from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-    axins = inset_axes(ax,  "55%", "60%" ,loc="lower right", borderpad=1)
-
-    sns.lineplot(epochs_range, history_trend['loss'], lw=lw, ls=ls,label='train loss', ax=axins, marker='o', markersize=ms)
-    sns.lineplot(epochs_range, history_trend['val_loss'], lw=lw, ls=ls,label='validation loss', ax=axins, marker='o', markersize=ms)
-
-    #dashed lines with accuracy and loss on test set
-    ax.axhline(y=test_results[1], label='test', color='black', lw=2)
-    axins.axhline(y=test_results[0], label='test', color='black', lw=2)
-
-    ax.legend(loc='lower left')
-    axins.get_legend().remove()
-    ax.set_xlabel('Epochs')
-    ax.set_ylabel('Accuracy')
-    axins.set_ylabel('Loss')
-    axins.set_xticklabels([])
-    axins.set_yticks([0,0.5,1])
-    ax.set_ylim(0,1)
-    axins.set_ylim(0,1)
-    fig.savefig("CNN_modelCNR/{}_epochs_{}_batch_history.png".format(epochs, batch_size), bbox_inches='tight')
+from utils import prepare_data, get_test_generator, plot_history
 
 
 parser = argparse.ArgumentParser(description='Train a classifier')
@@ -90,7 +44,7 @@ def main(epochs, batch_size, load, save):
         print("test loss, test acc:", r)
         #save test results
         np.save("CNN_modelCNR/{}_epochs_{}_batch_test_results.npy".format(epochs, batch_size), r)
-        plot_history(history, epochs, batch_size)
+        plot_history(history, epochs, batch_size, dataset="CNR")
 
     else:
         if save: _, _, _, _, _, _ = prepare_data(busy_data, free_data, save=True,  save_file='classifier_dataCNR')

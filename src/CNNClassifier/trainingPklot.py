@@ -10,7 +10,7 @@ import tensorboard as tb
 import cv2
 import errno
 tf.io.gfile = tb.compat.tensorflow_stub.io.gfile
-from utils import prepare_data, get_test_generator, frozen_graph_maker
+from utils import prepare_data, get_test_generator, plot_history
 
 
 parser = argparse.ArgumentParser(description='Train a classifier')
@@ -44,7 +44,7 @@ def main(epochs, batch_size, load, save):
         print("test loss, test acc:", r)
         #save test results
         np.save("CNN_modelPklot/{}_epochs_{}_batch_test_results.npy".format(epochs, batch_size), r)
-
+        plot_history(history, epochs, batch_size, dataset="PKLOT")
     else:
         print("\npreparing data")
         if save: _, _, _, _, _, _ = prepare_data(busy_data, free_data, save=True, save_file='classifier_dataPklot',nmax= 3000)
