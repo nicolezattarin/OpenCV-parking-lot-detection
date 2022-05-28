@@ -20,7 +20,7 @@
 vector<camera_picture> GetCameraPictures(vector<string>, vector<Parking>, int , string, bool, bool, bool, string );
 vector<Parking> CNRReadCameraCSV(string);
 vector<camera_picture> PKlotReadCameraCSV(int, string, bool, bool, bool, string);
-vector<camera_picture> ReadImages(int, string, bool, bool, bool, string);
+vector<camera_picture> ReadImages(int, string, bool, bool, bool, string, string);
 char to_upper_char (char);
 char to_lower_char (char);
 string to_upper (string);

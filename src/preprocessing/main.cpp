@@ -25,8 +25,8 @@ int main(int argc, char** argv){
     /*                      READ DATA AND INITIALIZE                        */
     /************************************************************************/
 
-    if (argc != 7){
-        cout << "usage: ./main <camera number> <weather> <rotation> <equalization> <blur> <dataset>" << endl;
+    if (argc != 8){
+        cout << "usage: ./main <camera number> <weather> <rotation> <equalization> <blur> <dataset> <nimgs>" << endl;
         return -1;}
 
     // read camera number
@@ -35,11 +35,6 @@ int main(int argc, char** argv){
         cout << "camera number should be from 1 to 9" << endl;
         return -1;}
 
-    // read weather
-    string weather = argv[2];
-    if (weather != "rainy" && weather != "sunny" && weather != "overcast" && weather != "all"){
-        cout << "weather should be 'rainy', 'sunny', 'overcast' or 'all'" << endl;
-        return -1;}
 
     // read parameters for preprocessing
     string rotation = argv[3];
@@ -65,6 +60,22 @@ int main(int argc, char** argv){
         cout << "dataset should be either 'cnr' or 'pklot'" << endl;
         return -1;}
 
+    // read weather
+    string weather = argv[2];
+    if (dataset == "cnr"){
+        if (weather != "rainy" && weather != "sunny" && weather != "overcast" && weather != "all"){
+        cout << "weather should be 'rainy', 'sunny', 'overcast' or 'all'" << endl;
+        return -1;}
+    }
+    else if (dataset == "pklot"){
+        if (weather != "rainy" && weather != "sunny" && weather != "cloudy" && weather != "all"){
+        cout << "weather should be 'rainy', 'sunny', 'overcast' or 'all'" << endl;
+        return -1;}
+    }
+
+    string nimgs = argv[7];
+   
+
     cout << "camera number: " << camera_number << endl;
     cout << "weather: " << weather << endl;
     cout << "rotation: " << rotation_flag << endl;
@@ -78,7 +89,7 @@ int main(int argc, char** argv){
 
     // now we have a vector with all the characteristics of the images, ready to process the patches
     cout << "\nreading images..." << endl;
-    vector<camera_picture> images = ReadImages(camera_number, weather, rotation_flag, equalization_flag, blur_flag, dataset);
+    vector<camera_picture> images = ReadImages(camera_number, weather, rotation_flag, equalization_flag, blur_flag, dataset, nimgs);
 
     /************************************************************************/
     /*                            PROCESSING                                */
@@ -95,18 +106,18 @@ int main(int argc, char** argv){
     save_patches(images, weather, camera_number, rotation_flag, equalization_flag, blur_flag, dataset);
 
     // DEBUG: print and save first image information
-    if (!fs::exists("test_img")){
-                fs::create_directories("test_img");
-            }
-    camera_picture first_image = images[0];
-    imwrite("test_img/first_image.jpg", first_image.getImg());
-    imwrite("test_img/first_image_lots.jpg", first_image.getImgParkingLots());
-    vector<Parking> parkings = first_image.getParking();
-    for (int i=0; i<parkings.size(); i++){
-        cv::Mat patch = parkings[i].getImg();
-        cv::resize(patch, patch, cv::Size(150, 150));
-        imwrite("test_img/first_image_p"+to_string(parkings[i].getId())+".jpg", patch);
-    }
+    // if (!fs::exists("test_img")){
+    //             fs::create_directories("test_img");
+    //         }
+    // camera_picture first_image = images[0];
+    // imwrite("test_img/first_image.jpg", first_image.getImg());
+    // imwrite("test_img/first_image_lots.jpg", first_image.getImgParkingLots());
+    // vector<Parking> parkings = first_image.getParking();
+    // for (int i=0; i<parkings.size(); i++){
+    //     cv::Mat patch = parkings[i].getImg();
+    //     cv::resize(patch, patch, cv::Size(150, 150));
+    //     imwrite("test_img/first_image_p"+to_string(parkings[i].getId())+".jpg", patch);
+    // }
 
     return 0;
     }

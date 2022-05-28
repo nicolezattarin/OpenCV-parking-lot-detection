@@ -107,7 +107,7 @@ void preprocess(cv::Mat& src, cv::Mat& dst, bool equalization, bool blur){
         // blur image
         cv::medianBlur(dst, dst, 5);
         //relative thresholding on brightness
-        float percentage = 0.2;
+        float percentage = 0.3;
         double max_brightness = 0;
         double min_brightness = 0;
 
@@ -115,15 +115,24 @@ void preprocess(cv::Mat& src, cv::Mat& dst, bool equalization, bool blur){
         cv::Mat thresholded_img = dst.clone();
         cv::cvtColor(thresholded_img, thresholded_img, cv::COLOR_BGR2HSV);
         cv::split(thresholded_img, channels);
-        
         //thresholding on channel 2
         cv::minMaxIdx(channels[2], &min_brightness, &max_brightness);
-        float high_threshold = max_brightness-max_brightness*percentage;
-        float low_threshold = min_brightness+min_brightness*percentage;
+        // cout << "min " << min_brightness << " max " << max_brightness<<endl;
 
-        cv::inRange(channels[2], low_threshold, high_threshold, channels[2]);
+        int high_threshold = max_brightness-max_brightness*percentage;
+        int low_threshold = min_brightness+min_brightness*percentage;
+
+        // cout << "Brightness range: " <<low_threshold <<", " <<high_threshold<<endl;
+        channels[2].setTo(low_threshold,channels[2]<low_threshold);
+        channels[2].setTo(high_threshold,channels[2]>high_threshold);
+
         cv::merge(channels, thresholded_img);
-        cv::cvtColor(thresholded_img, thresholded_img, cv::COLOR_HSV2BGR); //change back to BGR
+        cv::cvtColor(thresholded_img, thresholded_img, cv::COLOR_HSV2BGR);
+        //DEBUG:
+        // cv::namedWindow("test");
+        // cv::imshow("test", thresholded_img);
+        // cv::waitKey(0);
+         //change back to BGR
         thresholded_img.copyTo(dst);
     }
     else{

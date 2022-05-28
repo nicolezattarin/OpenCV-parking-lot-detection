@@ -134,7 +134,7 @@ vector<camera_picture> GetCameraPictures(vector<string> filenames, vector<Parkin
     //iterate over the images (pov of a camera)
     for (int i = 0; i < filenames.size(); i++){
         cv::Mat image = cv::imread(filenames[i]);
-
+       // cout << "ciao " << endl;
         preprocess(image, image, equalization, blur); //equalization and blur
 
         cv::Mat image_parking_lots = image.clone();//original image with squares in correspondence of parking lots
@@ -235,7 +235,7 @@ vector<camera_picture> GetCameraPictures(vector<string> filenames, vector<Parkin
  * @return vector<Mat> 
  */
 
-vector<camera_picture> ReadImages(int camera_number, string weather, bool rotation, bool equalization, bool blur, string dataset){
+vector<camera_picture> ReadImages(int camera_number, string weather, bool rotation, bool equalization, bool blur, string dataset, string nimgs){
     
     if (dataset == "cnr"){
         if (camera_number < 1 || camera_number > 9){
@@ -285,6 +285,10 @@ vector<camera_picture> ReadImages(int camera_number, string weather, bool rotati
         }
         string path = base_dir + pattern;
         vector<string> filenames = glob_path(base_dir + pattern);
+        if (nimgs != "all"){
+            filenames.resize(stoi(nimgs));
+        }
+        
 
         //define a vector of camera pictures:
         vector<camera_picture> camera_images = GetCameraPictures(filenames, parkings_coordinates, camera_number, weather, rotation, equalization, blur, dataset);
@@ -439,7 +443,6 @@ void ReadClassifiedSamples(vector<camera_picture>& images, int camera_number,
     }
 }
 
-
 /**
  * @brief given a camera picture, goes through all the pathes and updates the status of the 
  *        parking according to the classification already performed
@@ -493,10 +496,11 @@ void ReadClassifiedSamples(camera_picture& images, int camera_number,
         Parking p = parkings[i];
         int parking_id = p.getId();
 
-        string filename;
+        bool is_busy = 0;
         if (dataset == "cnr"){
             string filename = weather_id +"_"+date+"_"+time[0]+time[1]+"."+time[2]+time[3]+
                         "_C0"+to_string(camera_number)+"_"+to_string(parking_id)+".jpg";
+            is_busy = check_if_free(path, filename);
         }
         else if (dataset == "pklot"){
             //format 2013-03-05_14_55_10#016.jpg	
@@ -504,11 +508,10 @@ void ReadClassifiedSamples(camera_picture& images, int camera_number,
             ss << std::setw(3) << std::setfill('0') << parking_id;
             std::string parking_id_str = ss.str();
             string filename = date+"_"+time+"#"+parking_id_str+".jpg";
+            is_busy = check_if_free(path, filename);
         }
-        
-        bool is_free = check_if_free(path, filename);
-        
-        parkings[i].setStatus(is_free);
+        parkings[i].setStatus(is_busy);
+        // parkings[i].GetInfo();
     }
     images.setParking(parkings);
 }
@@ -604,13 +607,18 @@ void draw_free_lots(camera_picture& image, string dataset){
             vector<cv::Point> points = {p1, p2, p3, p4};
             if (p.getStatus()){
                 //draw rectangle
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++){
                     line(img_with_slots, points[i], points[i+1], cv::Scalar(0,255,0), 2);
-            }
+                }
+                line(img_with_slots, points[3], points[0], cv::Scalar(0,255,0), 2);
+            }   
             else{
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++){
                     line(img_with_slots, points[i], points[i+1], cv::Scalar(0,0,255), 2);
+                }
+                line(img_with_slots, points[3], points[0], cv::Scalar(0,0,255), 2);
             }
+
         }
         
     }

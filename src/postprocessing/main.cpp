@@ -16,8 +16,8 @@ int main(int argc, char** argv){
     /*                      INITIALIZE                        */
     /************************************************************************/
 
-    if (argc != 7){
-        cout << "usage: ./main <camera number> <weather> <rotation> <equalization> <blur> <dataset>" << endl;
+    if (argc != 8){
+        cout << "usage: ./main <camera number> <weather> <rotation> <equalization> <blur> <dataset> <nimgs>" << endl;
         return -1;}
 
     // read camera number
@@ -25,13 +25,7 @@ int main(int argc, char** argv){
     if (camera_number < 1 || camera_number > 9){
         cout << "camera number should be from 1 to 9" << endl;
         return -1;}
-
-    // read weather
-    string weather = argv[2];
-    if (weather != "rainy" && weather != "sunny" && weather != "overcast" && weather != "all"){
-        cout << "weather should be 'rainy', 'sunny', 'overcast' or 'all'" << endl;
-        return -1;}
-
+        
     // read parameters for preprocessing
     string rotation = argv[3];
     if (rotation != "0" && rotation != "1"){
@@ -56,6 +50,21 @@ int main(int argc, char** argv){
         cout << "dataset should be either 'cnr' or 'pklot'" << endl;
         return -1;}
 
+    // read weather
+    string weather = argv[2];
+    if (dataset == "cnr"){
+        if (weather != "rainy" && weather != "sunny" && weather != "overcast" && weather != "all"){
+        cout << "weather should be 'rainy', 'sunny', 'overcast' or 'all'" << endl;
+        return -1;}
+    }
+    else if (dataset == "pklot"){
+        if (weather != "rainy" && weather != "sunny" && weather != "cloudy" && weather != "all"){
+        cout << "weather should be 'rainy', 'sunny', 'overcast' or 'all'" << endl;
+        return -1;}
+    }
+
+    string nimgs = argv[7];
+
     cout << "camera number: " << camera_number << endl;
     cout << "weather: " << weather << endl;
     cout << "rotation: " << rotation_flag << endl;
@@ -64,7 +73,7 @@ int main(int argc, char** argv){
 
     // read camera pictures
     cout << "\nreading images..." << endl;
-    vector<camera_picture> images = ReadImages(camera_number, weather, rotation_flag, equalization_flag, blur_flag, dataset);
+    vector<camera_picture> images = ReadImages(camera_number, weather, rotation_flag, equalization_flag, blur_flag, dataset, nimgs);
 
     /************************************************************************/
     /*                 READ CLASSIFICATION RESULTS                          */
@@ -86,6 +95,14 @@ int main(int argc, char** argv){
     // read classified samples
     cout << "\nreading classified samples and setting the status of each lot..." << endl;
     ReadClassifiedSamples(images, camera_number, weather, rotation_flag, equalization_flag, blur_flag, dataset);
+
+    //DEBUG
+    // vector<Parking> p = images[0].getParking();
+    // cout << p.size() << endl;
+    // for (int i =0; i<p.size(); i++){
+    //     cout << p[i].getStatus() << endl;
+    // }
+
 
     // draw free lots
     cout << "\ndrawing free lots..." << endl;

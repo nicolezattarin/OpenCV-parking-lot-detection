@@ -56,6 +56,11 @@ camera_picture :: camera_picture(vector<Parking> parkings, cv::Mat image, cv::Ma
 
 void camera_picture :: setParking(vector<Parking> parkings){
     m_parkings = parkings;
+    // for (int i; i<parkings.size();i++){
+    //     cout << parkings[i].getId() << endl;
+
+    //     m_parkings.push_back(parkings[i]);
+    // }
 }
 
 vector <Parking> camera_picture :: getParking(){

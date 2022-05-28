@@ -60,6 +60,7 @@ def main (camera_number, weather, rot, eq, blur):
     if rot: preprocessing += "rot"
     if eq: preprocessing += "eq"
     if blur: preprocessing += "blur"
+    if preprocessing == "": preprocessing = "none"
 
     classified_sample = classify_data (camera_number, weather, dir_index, batch_size=32, epochs=10, dataset="PKLOT")
     classified_sample['date'] = classified_sample['filename'].apply(lambda x: x[:x.rfind("_")-6])

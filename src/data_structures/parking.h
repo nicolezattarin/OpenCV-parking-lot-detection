@@ -45,9 +45,10 @@ class Parking
         cv::Point getLowerRight();
         cv::Point getUpperLeft();
         cv::Point getCenter();
+        void GetInfo();
 
     private:
-        bool m_isFree;
+        bool m_status;
         int m_id;
         int m_x;
         int m_y;

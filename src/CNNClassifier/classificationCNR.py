@@ -71,6 +71,7 @@ def main (camera_number, weather, nimgs, rot, eq, blur):
     if rot: preprocessing += "rot"
     if eq: preprocessing += "eq"
     if blur: preprocessing += "blur"
+    if preprocessing == "": preprocessing = "none"
 
     classified_sample = classify_data (camera_number, weather, dir_index, batch_size=32, epochs=10, n_imgs=nimgs, dataset="CNR")
     labels = get_labels(camera_number, weather)

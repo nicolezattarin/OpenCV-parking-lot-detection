@@ -1,7 +1,7 @@
 #include "parking.h"
 
 Parking :: Parking(){
-    m_isFree = true;
+    m_status = true;
     m_id = -1;
     m_x = -1;
     m_y = -1;
@@ -15,7 +15,7 @@ Parking :: Parking(){
 }
 
 Parking :: Parking(int id, int x, int y, int width, int height){
-    m_isFree = true;
+    m_status = true;
     m_image = cv::Mat();
     m_id = id;
     m_x = x;
@@ -30,7 +30,7 @@ Parking :: Parking(int id, int x, int y, int width, int height){
 }
 
 Parking :: Parking(int id, int x, int y, int width, int height, cv::Mat image){
-    m_isFree = true;
+    m_status = true;
     m_image = image;
     m_id = id;
     m_x = x;
@@ -46,7 +46,7 @@ Parking :: Parking(int id, int x, int y, int width, int height, cv::Mat image){
 
 Parking :: Parking(int id, int width, int height, float angle, cv::Point center,
                 cv::Point lower_left, cv::Point upper_right, cv::Point lower_right, cv::Point upper_left){
-    m_isFree = true;
+    m_status = true;
     m_id = id;
     m_image = cv::Mat();
     m_x = -1; //not initialized
@@ -63,7 +63,7 @@ Parking :: Parking(int id, int width, int height, float angle, cv::Point center,
 }
 Parking :: Parking(int id, int width,  int height, cv::Mat img, float angle, cv::Point center,
                 cv::Point lower_left, cv::Point upper_right, cv::Point lower_right, cv::Point upper_left){
-    m_isFree = true;
+    m_status = true;
     m_id = id;
     m_image = img;
     m_x = -1; //not initialized
@@ -79,12 +79,12 @@ Parking :: Parking(int id, int width,  int height, cv::Mat img, float angle, cv:
     m_upper_left = upper_left;
 }
 // setters/getters
-void Parking :: setStatus(bool isEmpty){
-    m_isFree = isEmpty;
+void Parking :: setStatus(bool status){
+    m_status = status;
 }
 
 bool Parking :: getStatus(){
-    return m_isFree;
+    return m_status;
 }
 
 void Parking :: setId(int id){
@@ -163,3 +163,11 @@ cv::Point Parking :: getCenter(){
     return m_center;
 }
 
+void:: Parking :: GetInfo(){
+    cout << "ID: " << m_id << endl;
+    cout << "isFree: " << m_status << endl;
+    cout << "X: " << m_x << endl;
+    cout << "Y: " << m_y << endl;
+    cout << "Width: " << m_width << endl;
+    cout << "Height: " << m_height << endl;
+}
