@@ -47,7 +47,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--camera_number", type=int, default=1)
 parser.add_argument("--weather", type=str, default='sunny')
-parser.add_argument("--nimgs", type=int, default=None)
+parser.add_argument("--nimgs", type=int, default=10)
 parser.add_argument("--rot", type=int, default=0)
 parser.add_argument("--eq", type=int, default=0)
 parser.add_argument("--blur", type=int, default=0)

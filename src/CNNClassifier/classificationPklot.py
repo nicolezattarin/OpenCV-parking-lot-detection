@@ -32,7 +32,7 @@ def get_accuracy(data, labels):
     """
     data = data.sort_values(by=['filename'], ignore_index=True)
     labels = labels.sort_values(by=['filename'], ignore_index=True)
-    data['correct'] = data['class_id'] == labels['occupied']
+    data['correct'] = (data['class_id'] == labels['occupied'])
     return data['correct'].mean()
 
 
