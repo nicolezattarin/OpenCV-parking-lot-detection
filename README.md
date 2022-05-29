@@ -20,7 +20,7 @@ unzip CNR-EXT-Patches-150x150.zip
 wget http://cnrpark.it/dataset/CNRPark-Patches-150x150.zip
 unzip CNRPark-Patches-150x150.zip
 
-````
+```
 
 Then, manually check and put the right path in utils.cpp (lines 145, 158), and perform preprocessing:
 
@@ -62,8 +62,9 @@ wget http://www.inf.ufpr.br/vri/databases/PKLot.tar.gz
 gunzip  PKLot.tar.gz
 ```
 A similar path can be followed to process images from Pklot, but in this case it is recomended to reduce the amount of data to prcess by running first:
-
+```
 # for each camera and weather condition run
+# since the dataset is 4.6GB, consider a subset of it 
 reduce_xml_parser.py 
 		  --ndata <ndata>
  		  --camera_number <camera_number> 
