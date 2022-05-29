@@ -56,11 +56,13 @@ make
 ### PARKING LOT DATABASE
 
 To download the dataset, just run from parent directory:
+
 ```
 # download data
 wget http://www.inf.ufpr.br/vri/databases/PKLot.tar.gz
 gunzip  PKLot.tar.gz
 ```
+
 A similar path can be followed to process images from Pklot, but in this case it is recomended to reduce the amount of data to prcess by running first:
 ```
 # for each camera and weather condition run
@@ -69,7 +71,7 @@ reduce_xml_parser.py
 		  --ndata <ndata>
  		  --camera_number <camera_number> 
 		  --weather <weather>
-``
+```
 
 ## Results
 Let us first providea proof of the performances of the implemented CNN classifier. The following figure shows the history for train, test and validation accuracy/loss of a model trained with 10 epochs and batch size 32.
