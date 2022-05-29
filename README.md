@@ -4,9 +4,11 @@ We provide a possible strategy for detecting parking lots in a given camera imag
 
 The code i adapted to analyze images coming from [CNRPark+EXT](http://cnrpark.it) dataset, and [Parking Lot database](https://web.inf.ufpr.br/vri/databases/parking-lot-database/).
 
-### Typical workflow
+## Typical workflow
 The src folder contains the code for the classifier, pre- and post-processing of images,data are meant to be saved in the parent directory.
 A typical workflow follows.
+
+### CNR DATASET
 To download the datasets run:
 ```
 git clone https://github.com/nicolezattarin/OpenCV-parking-lot-detection.git
@@ -39,7 +41,8 @@ make sure that the first time you run the script the flag save is True, this all
 
 Then, you can perform the actual detection:
 ```
-python classificationCNR.py --camera_number <camera_number> --weather <weather> --rot  <flag_rotation> --eq  <flag_equalization> --blur <flag_blur>
+python classificationCNR.py --camera_number <camera_number> --weather <weather> 
+			    --rot  <flag_rotation> --eq  <flag_equalization> --blur <flag_blur>
 ```
 with the parameters that can be retrieved by simply running `python classificationCNR.py --h`.
 
@@ -50,8 +53,24 @@ make
 ./main <camera_number> <weather> <flag_rotation> 
 	 <flag_equalization> <flag_blur> <dataset> <nimgs>
 ```
+### PARKING LOT DATABASE
 
-### Results
+To download the dataset, just run from parent directory:
+```
+# download data
+wget http://www.inf.ufpr.br/vri/databases/PKLot.tar.gz
+gunzip  PKLot.tar.gz
+```
+A similar path can be followed to process images from Pklot, but in this case it is recomended to reduce the amount of data to prcess by running first:
+
+# for each camera and weather condition run
+reduce_xml_parser.py 
+		  --ndata <ndata>
+ 		  --camera_number <camera_number> 
+		  --weather <weather>
+``
+
+## Results
 Let us first providea proof of the performances of the implemented CNN classifier. The following figure shows the history for train, test and validation accuracy/loss of a model trained with 10 epochs and batch size 32.
 
 <p align="center">
