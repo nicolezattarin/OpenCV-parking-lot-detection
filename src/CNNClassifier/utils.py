@@ -222,6 +222,15 @@ def classify_data (camera_number, weather, dir_index, dataset, batch_size=32, ep
     return data
 
 def plot_history(history_trend, epochs, batch_size, dataset):
+    """
+    plot the history of the model
+    params:
+        history_trend: history of the model
+        epochs: epochs of the model
+        batch_size: batch size of the model
+        dataset: dataset
+    """
+    
     # PLOT HISTORY OF VALIDATION AND TRAINING ACCURACY/LOSS
     sns.set_theme(style="white", font_scale=1.5, palette="Dark2")
 

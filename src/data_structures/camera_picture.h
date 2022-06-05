@@ -11,7 +11,8 @@ using namespace std;
 
 /**
  * @brief Construct a new camera picture object, 
- * defined as an object with a picture and a series of parking slots
+ * defined as an object with a picture and a series of parking slots, 
+ * this is meant to contain all the informations related to a picture
  */
 class camera_picture
 {

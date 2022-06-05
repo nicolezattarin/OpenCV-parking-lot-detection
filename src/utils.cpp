@@ -379,6 +379,17 @@ vector<string> glob_path(const string& pattern) {
     return filenames;
 }
 
+/**
+ * @brief save patches in a folder
+ * 
+ * @param camera_images 
+ * @param weather 
+ * @param camera_number 
+ * @param rotation 
+ * @param equalization 
+ * @param blur 
+ * @param dataset 
+ */
 void save_patches(vector<camera_picture> camera_images, string weather, int camera_number,
                 bool rotation, bool equalization, bool blur, string dataset){
     // run over all the images of the camera, considering thatpatches from the datsset are loaded as:
