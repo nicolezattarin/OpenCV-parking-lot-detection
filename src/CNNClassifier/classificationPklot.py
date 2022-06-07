@@ -32,17 +32,21 @@ def get_accuracy(data, labels):
     """
     data = data.sort_values(by=['filename'], ignore_index=True)
     labels = labels.sort_values(by=['filename'], ignore_index=True)
-    data['correct'] = (data['class_id'] == labels['occupied'])
-    return data['correct'].mean()
+    acc = 0
+    for i in range(len(data)):
+        if data['class_id'] [i] == labels['occupied'] [i]:
+            acc += 1
+    # data['correct'] = (data['class_id'] == labels['occupied'])
+    return acc/len(data)
 
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--camera_number", type=int, default=1)
+parser.add_argument("--camera_number", type=int, default=3)
 parser.add_argument("--weather", type=str, default='sunny')
 parser.add_argument("--rot", type=int, default=0)
 parser.add_argument("--eq", type=int, default=0)
-parser.add_argument("--blur", type=int, default=0)
+parser.add_argument("--blur", type=int, default=1)
 
 def main (camera_number, weather, rot, eq, blur):
     """
