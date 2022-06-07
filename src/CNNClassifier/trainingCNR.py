@@ -21,6 +21,14 @@ parser.add_argument('--load', type=bool , default=True, help='if true an existin
 parser.add_argument('--save', type=bool , default=False, help='if truethe images are saved again from zero')
 
 def main(epochs, batch_size, load, save):
+    """
+    trains the model and eventually plots the results
+    parameters:
+    epochs: number of epochs
+    batch_size: batch size
+    load: if true an existing model is loaded
+    save: if true the images are saved again from zero
+    """
     from CNNClassifier import CNNClassifier
     busy_data = "../../CNRPark-Patches-150x150/*/busy/*.jpg"
     free_data = "../../CNRPark-Patches-150x150/*/free/*.jpg"
